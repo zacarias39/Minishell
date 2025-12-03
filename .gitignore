@@ -1,0 +1,6 @@
+.vscode/
+*.o
+minishell
+*.a
+lab/
+backup/
