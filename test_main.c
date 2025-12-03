@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 16:45:13 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/03 01:04:08 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:57:15 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int main(int ac, char **av, char **envp)
 			printf("\n");
 			printf("Syntax: OK!\n");
 			exit(0); // could be a return, and we must free the line var, also the root
+            // No we don't need because we'll use this child process just to check for syntax errors;
 		}
 		else
 			waitpid(pid, 0, 0);
@@ -130,7 +131,7 @@ int main(int ac, char **av, char **envp)
 			cd_cmd(root->args_token[0]);
 		else if (!ft_strcmp(root->token, "pwd"))
 			pwd_cmd();
-		ft_strtok(line, false, true);
+		ft_strtok(NULL, false, true);
 	}
 	free(line);
 	return (0);
