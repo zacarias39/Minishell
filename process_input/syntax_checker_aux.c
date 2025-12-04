@@ -1,31 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readline_utils.c                                   :+:      :+:    :+:   */
+/*   syntax_checker_aux.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/12 15:57:56 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/11/27 13:54:55 by dadmendo         ###   ########.fr       */
+/*   Created: 2025/11/27 13:52:35 by dadmendo          #+#    #+#             */
+/*   Updated: 2025/11/27 13:52:40 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*d_get_input(void)
-{
-	char	*line;
-	char	*username;
-
-	username = ft_strjoin(getenv("USER"), "$ ");
-	line = readline(username);
-	if (*line)
-		add_history(line);
-	else
-	{
-		free(line);
-		line = NULL;
-	}
-	free(username);
-	return (line);
-}

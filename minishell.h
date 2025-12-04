@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dadivaldo <dadivaldo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 14:07:38 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/02 23:00:36 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:04:35 by dadivaldo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # include <sys/wait.h>
 # include <termcap.h>
 # include <termios.h>
-# include <limits.h>
 # include <unistd.h>
+# include <limits.h>
 
 # define GREATER '>'
 # define LESS '<'
@@ -47,9 +47,18 @@
 # define BCMD "cd echo pwd export env unset exit"
 # define METACHAR "<< < > >> | ="
 
-#define WORD_LIST 1 
-#define FILENAME 2
-#define WORD 3 
+
+
+/*
+	BY Dadmendo
+*/
+typedef struct s_envp
+{
+	char **matrix;
+	size_t	top;
+	size_t	capacity;
+}	t_envp;
+
 
 typedef enum e_token_type
 {
@@ -65,12 +74,10 @@ typedef enum e_token_type
 	RedirRight,
 	OrCondition,
 	AndCondition,
-	Undefined
 }					t_token_type;
 
 typedef struct s_word
 {
-	t_token_type	type;
 	char			*token;
 	struct s_word	*next;
 }					t_word;
@@ -103,33 +110,44 @@ char				*ft_strtok(char *str, char op, char clean);
 
 // tester_functions.o
 
-// process_input/syntax_checker_1.c
+// process_input/syntax_checker.c
+bool				expect(char *expected, bool rigor);
 t_ast				*parse_expression(bool is_check);
 t_ast				*condition(bool is_check);
 t_ast				*pipeline(bool is_check);
 t_ast				*command(bool is_check);
+// process_input/syntax_checker1.c
 t_ast				*command_element(bool is_check, bool rigor, int *is_true);
-// process_input/syntax_checker_2.c
 t_ast				*redirection_list(bool is_check, bool rigor, int *is_true);
-t_word				*redirection(bool is_check, bool rigor, int *is_true);
+t_ast				*redirection(bool is_check, bool rigor, int *is_true);
 t_ast				*word_list(bool is_check, int *is_true);
-void				*word(bool is_check, bool rigor, int return_type,
+void				*word(bool is_check, bool rigor, bool is_list,
 						int *is_true);
-// process_input/syntax_checker_utils.c
-bool				expect(char *expected, bool rigor);
-char				expect_word(char *token, char rigor);
-void				*get_list(bool is_check, int *is_true);
 // process_input/process_ast.c
 t_ast				*create_node(char *token, t_token_type type);
 t_ast				*get_parent(char *token, t_ast *left, t_ast *right,
 						t_token_type type);
-t_word				*node_create(char *token, t_token_type type);
-void				list_add(t_wordlist **wordlist, char *token);
-// builtin/
+t_word				*node_create(char *token);
+void	list_add(t_wordlist **wordlist, char *token);
+
+/*
+	BUILTIN
+*/
 int echo_cmd(char **args);
 int	env_cmd(char **env_vars);
 int	cd_cmd(char *path);
 int	pwd_cmd(void);
-// utils/ft_envs.c
-char	*ft_getenv(char **envs, const char *name);
+
+
+/*
+	FUNÇÃO DE TESTE
+*/
+char	**ft_get_args(t_word *tokens, size_t size);
+
+t_envp	ft_initialize(char **envs);
+
+void	ft_free_t_envp(t_envp *env_metadata);
+char	*ft_getenv(t_envp env_metadata, const char *name);
+
+
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:05:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/03 17:54:30 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/02 15:03:40 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,6 @@ char	*get_operator(char *str, int *i)
 	return (start);
 }
 
-void	*pointer_clear(char **s1, char **s2, int *times, int *i)
-{
-	free(*s1);
-	free(*s2);
-	*s1 = NULL;
-	*s2 = NULL;
-	*i = 0;
-	*times = 0;
-	return (NULL);
-}
-
 char	*ft_strtok(char *str, char op, char clean)
 {
 	static char	*str_1;
@@ -102,23 +91,24 @@ char	*ft_strtok(char *str, char op, char clean)
 
 	if (clean == true)
 	{
-		pointer_clear(&str_2, &str_1, &times, &i);
-		return  (NULL);
+		free(str_2);
+		free(str_1);
+		str_1 = NULL;
+		str_2 = NULL;
+		return (i = 0, start = 0, times = 0, NULL);
 	}
-	// Now I don't even check if str_2 is NULL, I just directly strdup it whenever there is a new pointer
-	// I did this because after freeing it, instead of pointing to NULL, it was pointing a garbage on the next call
-	if (str != NULL)
-	{
+	if (str)
 		str_1 = str;
-		str_2 = ft_strdup(&str_1[i]);
-	}
 	if ((!str_1 || !str_1[i]) && (!str_2 || !str_2[i]) && !op)
 		return (start = NULL, NULL);
 	if (op == true)
 		return (start);
+	if (!str_2)
+		str_2 = ft_strdup(&str_1[i]);
 	if (times % 2 == 0)
 		start = get_operator(str_1, &i);
 	else
 		start = get_operator(str_2, &i);
-	return (times++, start);
+	times++;
+	return (start);
 }

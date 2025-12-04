@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readline_utils.c                                   :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dadivaldo <dadivaldo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/12 15:57:56 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/11/27 13:54:55 by dadmendo         ###   ########.fr       */
+/*   Created: 2025/12/04 11:19:54 by dadivaldo         #+#    #+#             */
+/*   Updated: 2025/12/04 11:20:53 by dadivaldo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <minishell.h>
 
-char	*d_get_input(void)
+void	ft_env(t_envp metadata)
 {
-	char	*line;
-	char	*username;
+	size_t	i;
 
-	username = ft_strjoin(getenv("USER"), "$ ");
-	line = readline(username);
-	if (*line)
-		add_history(line);
-	else
+	i = 0;
+	while (i < metadata.capacity)
 	{
-		free(line);
-		line = NULL;
+		ft_putendl_fd(metadata.matrix[i], STDOUT_FILENO);
 	}
-	free(username);
-	return (line);
 }
