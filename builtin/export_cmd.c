@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_args.c                                      :+:      :+:    :+:   */
+/*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadivaldo <dadivaldo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/02 16:11:11 by dadivaldo         #+#    #+#             */
-/*   Updated: 2025/12/02 16:18:53 by dadivaldo        ###   ########.fr       */
+/*   Created: 2025/12/11 12:23:56 by dadmendo          #+#    #+#             */
+/*   Updated: 2025/12/11 13:34:05 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	**ft_get_args(t_word *tokens, size_t size)
+int	export_cmd(char **args, size_t length)
 {
-	char	**args;
-	size_t	i = 0;
+	size_t	i;
 
-	args = malloc(sizeof(char *) + (size + 1));
-	while (tokens) {
-			args[i++] = tokens->token;
-			tokens = tokens->next;
-	}
-	args[i] = NULL;
-	return (args);
+	quick_sort(&args, 0, length);
+	i = 0;
+	while (i < length)
+		ft_putendl_fd(args[i++], STDIN_FILENO);
+	return (0);
 }

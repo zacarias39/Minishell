@@ -6,7 +6,7 @@
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:38 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/11/28 13:00:42 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:58:46 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	cd_cmd(char *path)
 {
-	int status;
+	int	status;
 
 	status = chdir(path);
 	return (status);

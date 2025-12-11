@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_clean_data.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadivaldo <dadivaldo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/04 11:19:54 by dadivaldo         #+#    #+#             */
-/*   Updated: 2025/12/04 11:20:53 by dadivaldo        ###   ########.fr       */
+/*   Created: 2025/12/09 13:47:23 by dadmendo          #+#    #+#             */
+/*   Updated: 2025/12/10 13:16:55 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_env(t_envp metadata)
+void	ft_free_matrix(char ***matrix)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < metadata.capacity)
-	{
-		ft_putendl_fd(metadata.matrix[i], STDOUT_FILENO);
-	}
+	while ((*matrix) && (*matrix)[i])
+		free((*matrix)[i++]);
+	free((*matrix));
+	(*matrix) = NULL;
 }

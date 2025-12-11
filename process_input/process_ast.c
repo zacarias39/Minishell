@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadivaldo <dadivaldo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 14:24:00 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/02 16:26:52 by dadivaldo        ###   ########.fr       */
+/*   Updated: 2025/12/01 12:56:30 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_ast	*create_node(char *token, t_token_type type)
 	node->word = NULL;
 	node->token = token;
 	node->type = type;
-	node->args_token = NULL;
 	return (node);
 }
 
@@ -50,7 +49,7 @@ t_ast	*get_parent(char *token, t_ast *left, t_ast *right, t_token_type type)
 	return (parent);
 }
 
-t_word	*node_create(char *token)
+t_word	*node_create(char *token, t_token_type type)
 {
 	t_word	*node;
 
@@ -59,6 +58,7 @@ t_word	*node_create(char *token)
 	node = (t_word *)malloc(sizeof(t_wordlist));
 	if (!node)
 		return (NULL);
+	node->type = type;
 	node->token = token;
 	node->next = NULL;
 	return (node);
@@ -70,7 +70,7 @@ void	list_add(t_wordlist **wordlist, char *token)
 	t_word		*node;
 
 	word = *wordlist;
-	node = node_create(token);
+	node = node_create(token, Undefined);
 	if (!node)
 		return ;
 	if (!word)

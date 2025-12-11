@@ -6,8 +6,13 @@
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:47:38 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/11/24 14:11:23 by zcasimir        ###   ########.fr        */
+/*   Updated: 2025/12/10 14:38:54 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_cmd_error()
+{
+
+}

@@ -6,26 +6,58 @@
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:02:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/02 14:06:08 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:53:15 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_getenv(char **envs, const char *name)
+char	*ft_getenv(t_envars *envars, const char *name)
 {
-	static char **tmp_env;
+	static char	**tmp_env;
 	size_t		i;
+	size_t		len;
 
+	len = ft_strlen(name);
 	i = 0;
-	if (envs)
-		tmp_env = envs;
+	if (envars)
+		tmp_env = envars->matrix;
+	if (!name)
+		return (NULL);
 	while (tmp_env[i])
 	{
-		if (!strncmp(tmp_env[i], name, ft_strlen(name)))
-			return (tmp_env[i]);
+		if (!ft_strncmp(tmp_env[i], name, len))
+		{
+			if (!ft_strncmp(tmp_env[i] + len, "=", 1))
+				return (tmp_env[i] + (++len));	
+		}
 		i++;
 	}
 	return (NULL);
 }
 
+char	**matrix_from_list(t_wordlist **list)
+{
+	t_word	*node;
+	size_t	i;
+	char	**matrix;
+
+	if (!(*list) || !(*list)->list_len)
+		return (NULL);
+	node = (*list)->list[HEAD];
+	matrix = malloc(sizeof(char *) * ((*list)->list_len + 1));
+	i = 0;
+	if (!matrix) // ERROR
+		return (NULL); // CHANGE IT LATER
+	while (node)
+	{
+		matrix[i++] = node->token;
+		(*list)->list[HEAD] = node;
+		node = node->next;
+		free((*list)->list[HEAD]);
+	}
+	matrix[i] = NULL;
+	free(*list);
+	*list = NULL;
+	return (matrix);
+}
