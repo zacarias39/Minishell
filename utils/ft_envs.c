@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_envs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:02:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/11 14:53:15 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:42:19 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ char	**matrix_from_list(t_wordlist **list)
 		return (NULL); // CHANGE IT LATER
 	while (node)
 	{
+		// duplicating the string is need here, because those string inside the list can't be freed;
 		matrix[i++] = node->token;
 		(*list)->list[HEAD] = node;
 		node = node->next;

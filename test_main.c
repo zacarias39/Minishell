@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 16:45:13 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/11 13:30:11 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/12 12:03:28 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,26 +116,32 @@ void	print_ast(t_ast *node, const char *prefix, int is_last)
 		print_ast(node->right, new_prefix, ++idx == child_count);
 }
 
-void	builtin_cmd(t_ast *root, t_envars envars_info)
+// envars_info is now a pointer because after updating it with new envars the changes weren't persisting
+void	builtin_cmd(t_ast *root, t_envars *envars_info)
 {
 	ssize_t	i;
 
 	root->args_token = matrix_from_list(&root->word);
+	// putting root->word on a condition is pointless and can result in unwanted behaviour
+	// because it will always be NULL, as it's being freed inside matrix_from_list function
+	// that's way I removed it;
 	if (!ft_strcmp(root->token, "echo"))
 		echo_cmd(root->args_token);
-	else if (!ft_strcmp(root->token, "export") && !root->word)
-		export_cmd(envars_info.matrix, envars_info.n_items);
-	else if (!ft_strcmp(root->token, "cd") && root->word)
-		cd_cmd(root->args_token[0]);
+	else if (!ft_strcmp(root->token, "export"))
+		export_cmd(envars_info, root->args_token);
+	else if (!ft_strcmp(root->token, "cd"))
+		cd_cmd(root->args_token);
 	else if (!ft_strcmp(root->token, "pwd"))
 		pwd_cmd();
 	else if (!ft_strcmp(root->token, "env"))
 	{
 		i = -1;
-		while (++i < envars_info.n_items)
-			printf("%s\n", envars_info.matrix[i]);
+		while (++i < envars_info->n_items)
+			printf("%s\n", envars_info->matrix[i]);
 	}
-	ft_free_matrix(&root->args_token);
+	// Commenting this because, args_token pointers points to the strtok str
+	// which can only be freed there and not individualy;
+	//ft_free_matrix(&root->args_token);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -151,7 +157,7 @@ int	main(int ac, char **av, char **envp)
 	//TODO: THIS IS A TEST OF MINE, I ADDED THE ENVP ARRAY AGAIN IN OUR VARIABLE;
 	//printf("Before Capacity: %zd\n", envars_info.n_items);
 	//TODO: TESTING THE EXPORT ENVARS FUNCTION, IT SEEMS TO WORK REALLY WELL;
-	update_envars(&envars_info, envp);
+	//update_envars(&envars_info, envp);
 	//printf("After Capacity: %zd\n", envars_info.n_items);*/
 	while (true)
 	{
@@ -177,7 +183,7 @@ int	main(int ac, char **av, char **envp)
 		ft_strtok(line, false, false);
 		root = parse_expression(0);
 		printf("\nExecution:\n");
-		builtin_cmd(root, envars_info);
+		builtin_cmd(root, &envars_info);
 		ft_strtok(NULL, false, true);
 	}
 	free(line);

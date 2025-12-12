@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 14:07:38 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/11 13:29:17 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/12 12:02:26 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,10 +153,12 @@ void				list_add(t_wordlist **wordlist, char *token);
 // builtin/
 int					echo_cmd(char **args);
 int					env_cmd(char **env_vars);
-int					cd_cmd(char *path);
+// changed from a single pointer to a double pointer
+int					cd_cmd(char **path);
 int					pwd_cmd(void);
 	// Dadmendo 11/12/2025
-int					export_cmd(char **args, size_t length);
+//int					export_cmd(char **args, size_t length);
+int					export_cmd(t_envars *envars, char **args);
 
 // utils/ft_*
 char		*ft_getenv(t_envars *envars, const char *name);
