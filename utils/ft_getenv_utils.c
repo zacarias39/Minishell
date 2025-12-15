@@ -90,6 +90,7 @@ void	update_envars(t_envars *envars, char **envs)
 	quick_sort(&envars->matrix, 0, envars->n_items);
 	// update the function with the new environment variables;
 	ft_getenv(envars, NULL);
+	cmd_paths(true);
 }
 
 bool	ft_init_envars(char **envp, t_envars *new_envars)
@@ -111,5 +112,6 @@ bool	ft_init_envars(char **envp, t_envars *new_envars)
 	quick_sort(&new_envars->matrix, 0, new_envars->n_items);
 	// update the function with the new environment variables;
 	ft_getenv(new_envars, NULL);
+	cmd_paths(true);
 	return (true);
 }

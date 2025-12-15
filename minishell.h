@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 14:07:38 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/12 12:02:26 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:11:02 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,10 @@ void		ft_free_envars(t_envars *old_envars);
 void	update_envars(t_envars *envars, char **envs);
 char		**matrix_from_list(t_wordlist **list);
 void		ft_free_matrix(char ***matrix);
+char	*ft_cmd_error(char *cmd, char *cmd_name, bool is_absolute);
 
 char		*get_cmd_path(char *cmd);
+char	**cmd_paths(bool update);
 
 
 // 	Quick_sort

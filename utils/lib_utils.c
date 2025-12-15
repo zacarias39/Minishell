@@ -3,16 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   lib_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:47:38 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/10 14:38:54 by dadmendo         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:51:46 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_cmd_error()
-{
-
-}

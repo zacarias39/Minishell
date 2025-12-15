@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 16:45:13 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/12 12:03:28 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:02:59 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,12 @@ void	print_ast(t_ast *node, const char *prefix, int is_last)
 // envars_info is now a pointer because after updating it with new envars the changes weren't persisting
 void	builtin_cmd(t_ast *root, t_envars *envars_info)
 {
-	ssize_t	i;
-
+	char	*cmd = get_cmd_path(root->token);
+	if (cmd)
+		printf("the command %s exists\n", root->token);
 	root->args_token = matrix_from_list(&root->word);
 	// putting root->word on a condition is pointless and can result in unwanted behaviour
-	// because it will always be NULL, as it's being freed inside matrix_from_list function
+	// because it will always be NULL, as it's being freed inside maktrix_from_list function
 	// that's way I removed it;
 	if (!ft_strcmp(root->token, "echo"))
 		echo_cmd(root->args_token);
@@ -134,11 +135,9 @@ void	builtin_cmd(t_ast *root, t_envars *envars_info)
 	else if (!ft_strcmp(root->token, "pwd"))
 		pwd_cmd();
 	else if (!ft_strcmp(root->token, "env"))
-	{
-		i = -1;
-		while (++i < envars_info->n_items)
-			printf("%s\n", envars_info->matrix[i]);
-	}
+		//env_cmd(envars_info, root->args_token);
+		env_cmd(envars_info->matrix);
+	
 	// Commenting this because, args_token pointers points to the strtok str
 	// which can only be freed there and not individualy;
 	//ft_free_matrix(&root->args_token);

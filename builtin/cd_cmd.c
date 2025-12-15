@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:55:38 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/12 12:01:44 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:42:56 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,24 @@ size_t	arrlen(char **arr)
 
 int	cd_cmd(char **path)
 {
-	int	status;
+	char	*dir;
+	int		 status;
 
+	dir = ft_getenv(NULL, "HOME");
+	if (path)
+		dir = path[0];
 	// counting how many strings the array has
 	if (arrlen(path) >= 2)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		ft_putendl_fd("msh: cd: too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	status = chdir(path[0]);
+	status = chdir(dir);
 	// on error throw this message;
 	if (status == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(path[0], STDERR_FILENO);
+		ft_putstr_fd("msh: cd: ", STDERR_FILENO);
+		ft_putstr_fd(dir, STDERR_FILENO);
 		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
 		return (1);
 	}
