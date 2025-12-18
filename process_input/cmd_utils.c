@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:08:15 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/16 00:02:10 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:18:59 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,11 @@ char	*ft_cmd_error(char *cmd, char *cmd_name, bool is_absolute)
 	// checks if the cmd exists
     if (!cmd || access(cmd, F_OK))
     {
-		ft_putstr_fd("msh: ", STDERR_FILENO);
-		ft_putstr_fd(cmd_name, STDERR_FILENO);
 		// checks if the user has given the absolute path for the cmd
         if (is_absolute)
-		    ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+		    ft_perror("mnsh", cmd_name, "No such file or directory");
         else
-            ft_putendl_fd(": command not found", STDERR_FILENO);
+            ft_perror("mnsh", cmd_name, "command not found");
         if (is_absolute == false)
             free(cmd);
 		return (NULL);
@@ -43,9 +41,7 @@ char	*ft_cmd_error(char *cmd, char *cmd_name, bool is_absolute)
 	// checks if the cmd has executable permission
     if (access(cmd, X_OK))
     {
-		ft_putstr_fd("msh: ", STDERR_FILENO);
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putendl_fd(": Permission denied", STDERR_FILENO);
+		ft_perror("mnsh", cmd, "Permission denied");
         if (is_absolute == false)
             free(cmd);
 		return (NULL);

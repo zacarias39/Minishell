@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 14:07:38 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/15 23:11:02 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:23:29 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ int					pwd_cmd(void);
 int					export_cmd(t_envars *envars, char **args);
 
 // utils/ft_*
+void    ft_perror(char *at, char *cmd, char *msg);
 char		*ft_getenv(t_envars *envars, const char *name);
 bool		ft_init_envars(char **envp, t_envars *new_envars);
 t_envars	ft_realloc(t_envars *old_envars);

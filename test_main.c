@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 16:45:13 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/16 00:02:59 by zcasimir         ###   ########.fr       */
+/*   Updated: 2025/12/16 15:52:35 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	builtin_cmd(t_ast *root, t_envars *envars_info)
 {
 	char	*cmd = get_cmd_path(root->token);
 	if (cmd)
-		printf("the command %s exists\n", root->token);
+		printf("the command '%s' exists at: %s\n", root->token, cmd);
 	root->args_token = matrix_from_list(&root->word);
 	// putting root->word on a condition is pointless and can result in unwanted behaviour
 	// because it will always be NULL, as it's being freed inside maktrix_from_list function
