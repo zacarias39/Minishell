@@ -22,11 +22,11 @@ char	print_error(char *token, char rigor)
 			str = token;
 		return (false);
 	}
-	if (token)
-		str = token;
+	if (!token)
+		str = "newline";
 	printf("sh: syntax error near unexpected token `%s'\n", str);
 	ft_strtok(NULL, false, true);
-	exit(1);
+	exit(2);
 }
 
 char	*ft_strclose(char *str, int *i)

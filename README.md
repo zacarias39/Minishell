@@ -23,3 +23,14 @@ pwd: Teste: mkdir j && cd j; rm -fr ../f; pwd
 
 test_main.c:
 	Precisamos liberar o que foi mallocado, no processo filho
+
+
+# How to exec a command or a list of commands
+
+	1. 
+	execve (
+		PATH ->,
+		ARGS, 
+		ENVS,
+
+	)

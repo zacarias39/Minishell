@@ -29,7 +29,7 @@ int	cd_cmd(char **path)
 
 	dir = ft_getenv(NULL, "HOME");
 	if (path)
-		dir = path[0];
+		dir = path[1];
 	// counting how many strings the array has
 	if (arrlen(path) >= 2)
 	{

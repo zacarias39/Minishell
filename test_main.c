@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 void	print_list(t_wordlist *list, const char *prefix, int is_last)
 {
@@ -120,18 +121,19 @@ void	print_ast(t_ast *node, const char *prefix, int is_last)
 void	builtin_cmd(t_ast *root, t_envars *envars_info)
 {
 	char	*cmd = get_cmd_path(root->token);
+
 	if (cmd)
 		printf("the command '%s' exists at: %s\n", root->token, cmd);
-	root->args_token = matrix_from_list(&root->word);
+	root->args_token = matrix_from_list(&root->word, root->token);
 	// putting root->word on a condition is pointless and can result in unwanted behaviour
 	// because it will always be NULL, as it's being freed inside maktrix_from_list function
 	// that's way I removed it;
 	if (!ft_strcmp(root->token, "echo"))
-		echo_cmd(root->args_token);
+		echo_cmd(root->args_token + 1);
 	else if (!ft_strcmp(root->token, "export"))
-		export_cmd(envars_info, root->args_token);
+		export_cmd(envars_info, root->args_token + 1);
 	else if (!ft_strcmp(root->token, "cd"))
-		cd_cmd(root->args_token);
+		cd_cmd(root->args_token + 1);
 	else if (!ft_strcmp(root->token, "pwd"))
 		pwd_cmd();
 	else if (!ft_strcmp(root->token, "env"))
@@ -140,12 +142,13 @@ void	builtin_cmd(t_ast *root, t_envars *envars_info)
 	
 	// Commenting this because, args_token pointers points to the strtok str
 	// which can only be freed there and not individualy;
-	//ft_free_matrix(&root->args_token);
+	free(root->args_token);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
+	int			status = -1;
 	t_ast		*root;
 	t_envars	envars_info;
 	pid_t		pid;
@@ -169,17 +172,22 @@ int	main(int ac, char **av, char **envp)
 		if (pid == 0)
 		{
 			ft_strtok(line, false, false);
-			root = parse_expression(0);
+			root = parse_expression(true);
 			printf("\n");
 			print_ast(root, "", 1);
 			printf("\n");
 			printf("Syntax: OK!\n");
-			exit(0); // could be a return, and we must free the line var,also the root
+			_exit(0); // could be a return, and we must free the line var,also the root
 						// No we don't need because we'll use this child process just to check for syntax errors;
 		}
 		else
-			waitpid(pid, 0, 0);
+			wait(&status);
+		status = WEXITSTATUS(status);
+		if (status == SINTAXE_ERROR)
+			continue ;
+		printf("%d\n", status);
 		ft_strtok(line, false, false);
+		getchar();
 		root = parse_expression(0);
 		printf("\nExecution:\n");
 		builtin_cmd(root, &envars_info);

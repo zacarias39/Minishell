@@ -36,19 +36,24 @@ char	*ft_getenv(t_envars *envars, const char *name)
 	return (NULL);
 }
 
-char	**matrix_from_list(t_wordlist **list)
+char	**matrix_from_list(t_wordlist **list, char *cmd_name)
 {
 	t_word	*node;
 	size_t	i;
+	size_t	len;
 	char	**matrix;
 
-	if (!(*list) || !(*list)->list_len)
-		return (NULL);
-	node = (*list)->list[HEAD];
-	matrix = malloc(sizeof(char *) * ((*list)->list_len + 1));
+	len = 1;
+	node = NULL; 
+	if ((*list) && (*list)->list_len) {
+		len += (*list)->list_len;
+		node = (*list)->list[HEAD];
+	}
+	matrix = malloc(sizeof(char *) * (len + 1));
 	i = 0;
 	if (!matrix) // ERROR
 		return (NULL); // CHANGE IT LATER
+	matrix[i++] = cmd_name;
 	while (node)
 	{
 		// duplicating the string is need here, because those string inside the list can't be freed;

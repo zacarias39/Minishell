@@ -25,7 +25,7 @@ int	export_cmd(t_envars *envars, char **args)
 		update_envars(envars, args);
 	i = 0;
 	// only print if the args is NULL;
-	while (i < envars->n_items && !args)
+	while (i < envars->n_items && !*args)
 		printf("declare -x %s\n", envars->matrix[i++]);
 	return (0);
 }

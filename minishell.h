@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once // Alternative to Header Guard
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -52,6 +53,8 @@
 # define WORD 3
 
 # define MATRIX_SIZE 100
+
+# define SINTAXE_ERROR 2
 
 typedef enum e_token_type
 {
@@ -168,7 +171,7 @@ t_envars	ft_realloc(t_envars *old_envars);
 void		ft_free_envars(t_envars *old_envars);
 // 		Dadmendo 11/12/2025 - Export to Update
 void	update_envars(t_envars *envars, char **envs);
-char		**matrix_from_list(t_wordlist **list);
+char		**matrix_from_list(t_wordlist **list, char *cmd_name);
 void		ft_free_matrix(char ***matrix);
 char	*ft_cmd_error(char *cmd, char *cmd_name, bool is_absolute);
 

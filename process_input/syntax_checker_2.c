@@ -20,6 +20,8 @@ t_ast	*word_list(bool is_check, int *is_true)
 	parent = (t_ast *)word(is_check, false, WORD, is_true);
 	if (*is_true)
 	{
+		if (is_check)
+			return (NULL);
 		parent->word = (t_wordlist *)word(is_check, false, WORD_LIST, is_true);
 		*is_true = true;
 		return (parent);
