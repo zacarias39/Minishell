@@ -25,12 +25,9 @@ test_main.c:
 	Precisamos liberar o que foi mallocado, no processo filho
 
 
-# How to exec a command or a list of commands
+# Bullet point 12/30/2025
 
-	1. 
-	execve (
-		PATH ->,
-		ARGS, 
-		ENVS,
-
-	)
+- Add 'cmd_name' inside the 'word' function;
+- Removal of quotes from the strings;
+- String Expansion;
+- Execute cmd(Pseudocode)
