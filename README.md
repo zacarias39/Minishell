@@ -31,3 +31,8 @@ test_main.c:
 - Removal of quotes from the strings;
 - String Expansion;
 - Execute cmd(Pseudocode)
+
+
+Here_doc
+ -> << eof;
+Get all the data and put it inside a file called '.eof', and return the file name;
