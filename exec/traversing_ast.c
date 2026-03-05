@@ -26,7 +26,7 @@ bool	builtin_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork)
 
 	if (!word_node)
 		return (false);
-	builtin = get_builtin_info(word_node);
+	builtin = get_builtin_info(word_node, redir_node);
 	if (builtin.error)
 		return (false);
 	if (*builtin.fd_out == INVALID)
@@ -35,9 +35,7 @@ bool	builtin_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork)
 		builtin.cmd_exec(builtin.args, *builtin.fd_out);
 	if (!from_fork)
 		return (true);
-	close_heredoc(redir_node);
-	close_ast_node_fds(word_node);
-	close_pipes(&word_node->fds_lst);
+	close_fds(redir_node, word_node);
 	ft_free();
 	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }
@@ -64,10 +62,8 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 		ft_perror(MSH, "execve", strerror(errno));
 		last_cmd_status(126, UPDATE_DATA);
 	}
-	close_heredoc(redir_node);
-	close_pipes(&word->fds_lst);
+	close_fds(redir_node, word);
 	ft_free();
-	rl_clear_history();
 	exit(last_cmd_status(NO_STATUS, false));
 }
 
@@ -94,7 +90,7 @@ void	traversing_command(t_ast *node, bool from_fork)
 	word_node->fds[PIPE_WRITE] = node->fds[PIPE_WRITE];
 	word_node->fds_lst = node->fds_lst;
 	ft_execute_cmd(word_node, redir_node, from_fork);
-	return (close_heredoc(redir_node));
+	return (close_fds(redir_node, word_node));
 }
 
 void	traversing_paren_expression(t_ast *head)
@@ -119,7 +115,6 @@ void	traversing_paren_expression(t_ast *head)
 	traversing_ast(head, false);
 	wait_child();
 	ft_free();
-	rl_clear_history();
 	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }
 
@@ -134,7 +129,7 @@ void	traversing_ast(t_ast *head, bool from_fork)
 	if (head->type == RedirList)
 	{
 		ft_redirlist(head, NULL, NULL);
-		return (close_heredoc(head));
+		return (close_fds(head, NULL));
 	}
 	if (head->type == Word)
 		return (ft_execute_cmd(head, NULL, from_fork), (void)NULL);

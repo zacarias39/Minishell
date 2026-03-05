@@ -60,5 +60,4 @@ int	main(int ac, char **av, char **envp)
 		ft_malloc(0, TreeFree);
 		fork_calls_info(RESET_DATA, NULL, NULL);
 	}
-	rl_clear_history();
 }

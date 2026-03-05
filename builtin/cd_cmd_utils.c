@@ -86,7 +86,7 @@ void	fallback_dots(char **new_dir, char *dir)
 			return ;
 		free(*new_dir);
 		if (second_try)
-			return (*new_dir = tmp_dir, (void) NULL);
+			return (*new_dir = tmp_dir, (void)NULL);
 		aux = ft_strjoin2("/", dir);
 		*new_dir = ft_strjoin2(tmp_dir, aux);
 		free(aux);

@@ -97,6 +97,5 @@ void	exit_cmd(char **args, int fd)
 	else
 		exit_value = last_cmd_status(NO_STATUS, GET_STATUS);
 	ft_free();
-	rl_clear_history();
-	exit (last_cmd_status(exit_value, UPDATE_STATUS));
+	exit(last_cmd_status(exit_value, UPDATE_STATUS));
 }

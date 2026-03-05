@@ -50,17 +50,21 @@ bool	or_and_condition(t_ast *head)
 	return (true);
 }
 
-void	close_heredoc(t_ast *redir_node)
+void	close_fds(t_ast *redir_node, t_ast *word_node)
 {
-	t_word	*node;
+	const t_word	*node = NULL;
 
-	if (!redir_node)
-		return ;
-	node = *(redir_node->word->list);
+	if (redir_node)
+		node = *(redir_node->word->list);
 	while (node)
 	{
-		if (node->type == Heredoc && node->fd != INVALID)
+		if (node->fd != INVALID)
 			close(node->fd);
 		node = node->next;
 	}
+//	set_default_stdin(CLOSE);
+	if (!word_node)
+		return ;
+	close_pipes(&word_node->fds_lst);
+	close_ast_node_fds(word_node);
 }

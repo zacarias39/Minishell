@@ -73,4 +73,5 @@ void	ft_free(void)
 	ft_free_envars(get_envs(NULL));
 	free(get_current_dir(NULL, false));
 	set_default_stdin(CLOSE);
+	rl_clear_history();
 }
