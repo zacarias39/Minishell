@@ -1,101 +1,135 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_checker_1.c                                   :+:      :+:    :+:   */
+/*   syntax_checker_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/28 13:35:45 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/01 12:45:08by zcasimir         ###   ########.fr       */
+/*   Created: 2025/12/10 13:03:01 by dadmendo          #+#    #+#             */
+/*   Updated: 2026/03/04 16:43:42 by zcasimir        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ast.h"
 
 //<EXPRESSION>       ::= <CONDITION> ,'EOI' ;
-t_ast	*parse_expression(bool is_check)
+t_ast	*parse_expression(void)
 {
 	t_ast	*root;
 
-	root = condition(is_check);
-	expect(NULL, true);
-	if (is_check)
-		ft_strtok(NULL, false, true);
+	root = condition();
+	if (on_error(NULL, CHECK) || !expect(NULL, true))
+	{
+		printf("NULL\n");
+		on_error(NULL, RESET);
+		return (NULL);
+	}
 	return (root);
 }
 
 //<CONDITION>        ::= <PIPELINE> { ('||' | '&&') <PIPELINE> } ;
-t_ast	*condition(bool is_check)
+t_ast	*condition(void)
 {
 	t_ast	*parent;
 	t_ast	*right;
 
-	parent = pipeline(is_check);
-	while (true)
+	parent = pipeline(NULL);
+	while (parent)
 	{
 		if (expect("||", false))
 		{
-			right = pipeline(is_check);
-			if (is_check == false)
-				parent = get_parent("||", parent, right, OrCondition);
+			right = pipeline("cmdor> ");
+			if (right == NULL)
+				return (NULL);
+			parent = get_parent("||", parent, right, OrCondition);
 		}
 		else if (expect("&&", false))
 		{
-			right = pipeline(is_check);
-			if (is_check == false)
-				parent = get_parent("&&", parent, right, AndCondition);
+			right = pipeline("cmdand> ");
+			if (right == NULL)
+				return (NULL);
+			parent = get_parent("&&", parent, right, AndCondition);
 		}
 		else
 			return (parent);
 	}
+	return (NULL);
 }
 
 //<PIPELINE>         ::= <COMMAND> { '|' <COMMAND> } ;
-t_ast	*pipeline(bool is_check)
+t_ast	*pipeline(char *prompt)
 {
 	t_ast	*parent;
 	t_ast	*right;
 
-	parent = command(is_check);
-	while (true)
+	if ((prompt && get_expr(prompt)) || on_error(NULL, CHECK))
+		return (NULL);
+	parent = command();
+	while (parent && !on_error(NULL, CHECK))
 	{
 		if (expect("|", false))
 		{
-			right = command(is_check);
-			if (is_check == false)
-				parent = get_parent("|", parent, right, Pipeline);
+			if (get_expr("> ") || on_error(NULL, CHECK))
+				return (NULL);
+			right = command();
+			if (right == NULL || on_error(NULL, CHECK))
+				return (NULL);
+			parent = get_parent("|", parent, right, Pipeline);
 		}
 		else
 			return (parent);
 	}
+	return (NULL);
 }
 
 //<COMMAND>          ::=  <COMMAND-ELEMENT> { <COMMAND-ELEMENT> } ;
-t_ast	*command(bool is_check)
+t_ast	*command(void)
 {
 	t_ast	*parent;
 	t_ast	*right;
-	int		is_true;
 
-	is_true = 0;
-	parent = command_element(is_check, true, &is_true);
-	while (true)
+	parent = command_element(true, false);
+	while (parent && !on_error(NULL, CHECK))
 	{
-		right = command_element(is_check, false, &is_true);
-		if (right == NULL && is_true == false)
+		if (parent->type == Command && parent->paren == false)
+			right = command_element(false, true);
+		else
+			right = command_element(false, false);
+		if (right == NULL || on_error(NULL, CHECK))
 			return (parent);
-		if (is_check == false)
-			parent = get_parent(NULL, parent, right, Command);
+		if ((parent->c_paren && right->type == Word) || right->paren)
+		{
+			if (right->paren && parent->type != Word)
+				return (on_error("(", true), NULL);
+			return (on_error(right->token, true), NULL);
+		}
+		if (get_elements(parent, right))
+			continue ;
+		parent = get_parent(NULL, parent, right, Command);
 	}
+	return (parent);
 }
+/*
+<COMMAND-ELEMENT>  ::= <WORD-LIST> | <REDIRECTION-LIST> |
+		'(' <CONDITION> ')' ;
+*/
 
-//<COMMAND-ELEMENT>  ::= <WORD-LIST> | <REDIRECTION-LIST> ;
-t_ast	*command_element(bool is_check, bool rigor, int *is_true)
+t_ast	*command_element(bool rigor, bool is_arg)
 {
 	t_ast	*parent;
 
-	parent = word_list(is_check, is_true);
-	if (parent || *is_true == true)
+	if (on_error(NULL, CHECK))
+		return (NULL);
+	parent = word_list(is_arg);
+	if (parent)
 		return (parent);
-	return (redirection_list(is_check, rigor, is_true));
+	parent = redirection_list();
+	if (parent)
+		return (parent);
+	if (on_error(NULL, CHECK) || !expect("(", rigor))
+		return (NULL);
+	parent = condition();
+	if (expect(")", true) && parent)
+		return (parent->c_paren = parent->paren = true, parent);
+	return (NULL);
 }

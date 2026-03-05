@@ -6,49 +6,51 @@
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:14:42 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/02 14:37:46 by dadmendo         ###   ########.fr       */
+/*   Updated: 2026/02/18 19:37:58 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtin.h"
 
-bool	get_option(char **args, size_t	*i)
+bool	get_option(char *arg)
 {
-	bool print_nl;
-	size_t j;
-	char *aux;
+	bool	has_nl;
 
-	print_nl = true;
-	while (args[*i])
+	has_nl = false;
+	if (*arg == '-')
+		arg++;
+	while (*arg == 'n')
 	{
-		aux = args[*i];
-		j = 0;
-		if (aux[j] != '-')
-			break;
-		while (aux[++j] == 'n')
-			;
-		if (aux[j])
-			break;
-		print_nl = false;
-		*i = *i + 1;
+		arg++;
+		has_nl = true;
 	}
-	return (print_nl);
+	if (*arg)
+		has_nl = false;
+	return (has_nl);
 }
 
-int echo_cmd(char **args)
+void	echo_cmd(char **args, int fd)
 {
-	bool 	print_nl;
+	bool	print_nl;
 	size_t	i;
 
 	i = 0;
-	print_nl = get_option(args, &i);
-	while (args[i])
+	print_nl = true;
+	while (args && args[i])
 	{
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
+		if (get_option(args[i]))
+			print_nl = false;
+		else
+			break ;
+		i++;
+	}
+	while (args && args[i])
+	{
+		ft_putstr_fd(args[i++], fd);
 		if (args[i])
-			ft_putstr_fd(" ", STDOUT_FILENO);
+			ft_putstr_fd(" ", fd);
 	}
 	if (print_nl)
-		write(STDOUT_FILENO, "\n", sizeof(char));
-	return (0);
+		write(fd, "\n", sizeof(char));
+	last_cmd_status(EXIT_SUCCESS, true);
 }

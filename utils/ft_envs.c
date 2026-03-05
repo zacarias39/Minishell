@@ -6,33 +6,75 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:02:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/02 23:48:54 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:41:38 by zcasimir        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
-char	*ft_getenv(char **envs, const char *name)
+char	*ft_getenv(const char *name)
 {
-	static char **tmp_env;
-	size_t		begin;
-	size_t		i;
+	t_envars	*tmp_env;
+	ssize_t		i;
+	ssize_t		len;
 
-	i = 0;
-	begin = 0;
-	if (envs)
-		tmp_env = envs;
-	while (tmp_env[i])
+	len = ft_strlen(name);
+	i = -1;
+	tmp_env = get_envs(NULL);
+	if (!name || (!tmp_env || !tmp_env->matrix))
+		return (NULL);
+	while (++i < tmp_env->capacity)
 	{
-		if (!strncmp(tmp_env[i], name, ft_strlen(name)))
+		if (!ft_strncmp(tmp_env->matrix[i], name, len))
 		{
-			// skips all the characters before '=' including itself and return the rest;
-			while (tmp_env[i][begin++] != '=' && tmp_env[i][begin])
-				;
-			return (&tmp_env[i][begin]);
+			if (!ft_strncmp(tmp_env->matrix[i] + len, "=", 1))
+				return (tmp_env->matrix[i] + (++len));
 		}
-		i++;
 	}
 	return (NULL);
 }
 
+char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name)
+{
+	size_t	i;
+	t_word	*node;
+	char	*word;
+
+	i = 0;
+	node = NULL;
+	if (*list)
+		node = (*list)->list[HEAD];
+	word = get_expansion(cmd_name, Word);
+	while (word)
+	{
+		if (word)
+			matrix[i++] = word;
+		else
+			break ;
+		word = get_args(NULL, NEXT);
+		if (!word && node)
+		{
+			word = get_expansion(node->token, Word);
+			node = node->next;
+		}
+	}
+	*list = NULL;
+	return (matrix);
+}
+
+char	**matrix_from_list(t_wordlist **list, char *cmd_name)
+{
+	size_t	len;
+	ssize_t	i;
+	char	**matrix;
+
+	i = 0;
+	len = 1;
+	if ((*list) && (*list)->list_len)
+		len += (*list)->list_len;
+	matrix = ft_malloc(sizeof(char *) * (len + 1), Tree);
+	if (!matrix)
+		return (NULL);
+	matrix = add_to_args(list, matrix, cmd_name);
+	return (matrix);
+}

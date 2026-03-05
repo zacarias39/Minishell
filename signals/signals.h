@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/11 17:14:38 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/04 13:17:28 by zcasimir         ###   ########.fr       */
+/*   Created: 2026/02/03 14:49:01 by zcasimir          #+#    #+#             */
+/*   Updated: 2026/03/04 16:41:22 by zcasimir        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-char	*ft_strdup(const char *s)
-{
-	char	*str;
-	size_t	len;
-	size_t	i;
+# include "ast.h"
+# include "extern_libs.h"
 
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	str = (char *)ft_malloc((len + 1) * sizeof(char), Tree);
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i <= len)
-	{
-		str[i] = s[i];
-		i++;
-	}
-	return (str);
-}
+# define IDLE 1
+# define BUSY 2
+
+void	parent_signal(int op);
+void	handle_parent_sigint(int sig);
+void	handle_heredoc(int sig);
+void	handle_busy(int sig);
+void	handle_parent_sigint2(int sig);
+
+#endif

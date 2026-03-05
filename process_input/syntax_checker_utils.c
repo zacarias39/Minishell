@@ -6,72 +6,96 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 13:40:01 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/12/02 13:42:16 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:43:44 by zcasimir        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ast.h"
 
 // EXPECTS THE TOKEN TO BE THE SAME AS THE EXPECTED STRING
 bool	expect(char *expected, bool rigor)
 {
 	char	*token;
 
-	token = ft_strtok(NULL, true, false);
+	token = ft_strtok(NULL, PREVIOUS, NO);
 	if (ft_strcmp(expected, token))
-		return (print_error(token, rigor));
-	ft_strtok(NULL, false, false);
+		return (on_error(token, rigor));
+	ft_strtok(NULL, NEXT, NO);
 	return (true);
 }
 
-char	expect_word(char *token, char rigor)
+char	expect_word(char **token, char rigor)
 {
-	static int	double_quote;
-	static int	single_quote;
-	static int	is_on;
-	int			i;
+	char	quotes;
+	ssize_t	i;
 
-	i = 0;
-	while (token[i])
+	i = -1;
+	quotes = 0;
+	if (*token == NULL)
+		return (on_error(*token, rigor));
+	while (token[0][++i])
 	{
-		if (token[i] == '\'' && !double_quote)
-		{
-			single_quote = 1 - single_quote;
-			is_on = single_quote;
-		}
-		else if (token[i] == '\"' && !single_quote)
-		{
-			double_quote = 1 - double_quote;
-			is_on = double_quote;
-		}
-		if (is_on && token[i + 1] == '\0')
-			return (print_error(token, true));
-		if (ft_strchr(OPERATORS, token[i]) && !is_on)
-			return (print_error(token, rigor));
-		i++;
+		if (!quotes && ft_strchr(QUOTES, token[0][i]))
+			quotes = token[0][i];
+		else if (quotes == token[0][i])
+			quotes = 0;
+		if (!quotes && ft_strchr(OPERATOR, token[0][i]))
+			return (on_error(*token, rigor));
 	}
+	if (quotes)
+		return (on_error("unclosed quotes", true));
 	return (true);
 }
 
-void	*get_list(bool is_check, int *is_true)
+bool	get_elements(t_ast *parent, t_ast *node)
+{
+	t_ast	*child;
+
+	if (parent->type != Command)
+		return (false);
+	if (parent->left->type == node->type)
+		child = parent->left;
+	else
+		child = parent->right;
+	if (child->word)
+		child->word->list[TAIL]->next = node->word->list[HEAD];
+	else
+		child->word = node->word;
+	child->word->list[TAIL] = node->word->list[TAIL];
+	return (true);
+}
+
+char	*get_args(t_list *l, int flag)
+{
+	static t_list	*list;
+	static char		*token;
+
+	if (l)
+		list = l;
+	if (flag == PREVIOUS)
+		return (token);
+	if (!list)
+		return (token = NULL, list = NULL, NULL);
+	l = list;
+	list = list->next;
+	token = l->content;
+	free(l);
+	return (token);
+}
+
+void	*get_list(void)
 {
 	t_wordlist	*list;
 	char		*token;
-	int			i;
 
-	i = 0;
 	list = NULL;
-	token = ft_strtok(NULL, true, false);
+	token = ft_strtok(NULL, PREVIOUS, NO);
 	while (token != NULL)
 	{
-		if (expect_word(token, false) == false)
+		if (expect_word(&token, false) == false)
 			break ;
-		if (is_check == false)
-			list_add(&list, token);
-		token = ft_strtok(NULL, false, false);
-		i++;
+		list_add(&list, token);
+		token = ft_strtok(NULL, NEXT, NO);
 	}
-	if (i >= 1)
-		*is_true = true;
 	return (list);
 }

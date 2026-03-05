@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcasimir <zcasimir@42luanda.com     >      +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/14 11:51:15 by zcasimir         #+#    #+#              */
-/*   Updated: 2025/06/14 13:39:27 by zcasimir         ###   ########.fr       */
+/*   Created: 2025/06/14 11:51:15 by zcasimir          #+#    #+#             */
+/*   Updated: 2026/02/04 15:34:24 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = word_count(s, c);
-	str = (char **)ft_calloc((words + 1), sizeof(char *));
+	str = (char **)ft_malloc((words + 1) * sizeof(char *), General);
 	if (!str)
 		return (NULL);
 	j = 0;

@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 15:55:39 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/11/26 15:19:24 by dadmendo         ###   ########.fr       */
+/*   Created: 2026/03/04 19:20:42 by dadmendo          #+#    #+#             */
+/*   Updated: 2026/03/04 19:25:56 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdbool.h>
+#include "traversing_ast.h"
 
-int	foo()
+t_lst_fds	*ft_lstnew_fd(int fds[2])
 {
-	while (true)
-	{
-		if (printf(" ") == 0);
-			return ;
-	}
+	t_lst_fds	*node;
+
+	node = (t_lst_fds *)malloc(sizeof(t_lst_fds));
+	if (!node)
+		return (NULL);
+	node->fds[IN_FD] = fds[IN_FD];
+	node->fds[OUT_FD] = fds[OUT_FD];
+	node->next = NULL;
+	return (node);
 }
 
-int main()
+void	ft_lstadd_front_fd(t_lst_fds **lst, t_lst_fds *new)
 {
-	foo();
+	if (!new)
+		return ;
+	new->next = *lst;
+	*lst = new;
 }

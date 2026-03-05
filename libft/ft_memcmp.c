@@ -6,7 +6,7 @@
 /*   By: zcasimir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:43:52 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/06/11 16:07:24 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:44:26 by zcasimir        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	str1 = s1;
 	str2 = s2;
 	while (n--)
-	{	
+	{
 		if (*str1 != *str2)
 			return (*str1 - *str2);
 		str1++;

@@ -6,15 +6,14 @@
 /*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:24:41 by zcasimir          #+#    #+#             */
-/*   Updated: 2025/11/26 14:58:05 by dadmendo         ###   ########.fr       */
+/*   Updated: 2026/03/02 12:02:06 by dadmendo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <stdlib.h>
-# include <unistd.h>
+# include "extern_libs.h"
 
 typedef struct s_list
 {

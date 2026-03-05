@@ -3,22 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   env_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 13:58:47 by dadmendo          #+#    #+#             */
-/*   Updated: 2025/12/02 14:01:52 by dadmendo         ###   ########.fr       */
+/*   Updated: 2026/02/27 15:34:40 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtin.h"
 
-int	env_cmd(char **env_vars)
+void	env_cmd(char **args, int fd)
 {
-	size_t	i;
+	ssize_t		i;
+	t_envars	*envars;
+	char		*aux;
 
 	i = 0;
-	
-	while (env_vars[i])
-		ft_putendl_fd(env_vars[i++], STDIN_FILENO);
-	return (1);
+	(void)args;
+	envars = get_envs(NULL);
+	while (i < envars->capacity)
+	{
+		aux = envars->matrix[i];
+		if ((aux && *aux) && ft_strchr(aux, '='))
+			ft_putendl_fd(aux, fd);
+		i++;
+	}
 }
