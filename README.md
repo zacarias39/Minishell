@@ -156,8 +156,8 @@ All core logic, parsing algorithms, and execution flow were implemented manually
 
 ## Authors
 
-- **temanuel** - [42 Intra Profile](https://profile.intra.42.fr/users/temanuel)
-- **echilulu** - [42 Intra Profile](https://profile.intra.42.fr/users/echilulu)
+- **zcasimir** - [42 Intra Profile](https://profile.intra.42.fr/users/zcasimir)
+- **dadmendo** - [42 Intra Profile](https://profile.intra.42.fr/users/dadmendo)
 
 ## License
 
