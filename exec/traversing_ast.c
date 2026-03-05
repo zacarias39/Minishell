@@ -29,14 +29,15 @@ bool	builtin_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork)
 	builtin = get_builtin_info(word_node);
 	if (builtin.error)
 		return (false);
-	if (builtin.fd_out == INVALID)
-		builtin.fd_out = STDOUT_FILENO;
-	if (builtin.redir(redir_node, &builtin.fd_in, &builtin.fd_out))
-		builtin.cmd_exec(builtin.args, builtin.fd_out);
+	if (*builtin.fd_out == INVALID)
+		*builtin.fd_out = STDOUT_FILENO;
+	if (builtin.redir(redir_node, builtin.fd_in, builtin.fd_out))
+		builtin.cmd_exec(builtin.args, *builtin.fd_out);
 	if (!from_fork)
 		return (true);
 	close_heredoc(redir_node);
 	close_ast_node_fds(word_node);
+	close_pipes(&word_node->fds_lst);
 	ft_free();
 	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }
@@ -64,6 +65,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 		last_cmd_status(126, UPDATE_DATA);
 	}
 	close_heredoc(redir_node);
+	close_pipes(&word->fds_lst);
 	ft_free();
 	rl_clear_history();
 	exit(last_cmd_status(NO_STATUS, false));
@@ -90,6 +92,7 @@ void	traversing_command(t_ast *node, bool from_fork)
 	word_node->fd_out = node->fd_out;
 	word_node->fds[PIPE_READ] = node->fds[PIPE_READ];
 	word_node->fds[PIPE_WRITE] = node->fds[PIPE_WRITE];
+	word_node->fds_lst = node->fds_lst;
 	ft_execute_cmd(word_node, redir_node, from_fork);
 	return (close_heredoc(redir_node));
 }
@@ -137,10 +140,6 @@ void	traversing_ast(t_ast *head, bool from_fork)
 		return (ft_execute_cmd(head, NULL, from_fork), (void)NULL);
 	if (!check_and_create_pipe(head, &from_fork))
 		return ;
-	if (head->left)
-		head->left->fds_lst = head->fds_lst;
-	if (head->right)
-		head->right->fds_lst = head->fds_lst;
 	traversing_ast(head->left, from_fork);
 	if (!or_and_condition(head))
 		return ;

@@ -19,7 +19,11 @@ bool	check_and_create_pipe(t_ast *head, bool *from_fork)
 		if (pipe(head->fds) == INVALID)
 			return (ft_perror(MSH, "pipe", strerror(errno)), false);
 		add_pipes_to_child(head);
-		ft_lstadd_front_fd(head->fds_lst, head->fds);
+		ft_lstadd_front_fd(&head->fds_lst, ft_lstnew_fd(head->fds));
+		if (head->left)
+			head->left->fds_lst = head->fds_lst;
+		if (head->right)
+			head->right->fds_lst = head->fds_lst;
 		*from_fork = true;
 	}
 	return (true);

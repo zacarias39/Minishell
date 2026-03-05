@@ -16,7 +16,7 @@ t_lst_fds	*ft_lstnew_fd(int fds[2])
 {
 	t_lst_fds	*node;
 
-	node = (t_lst_fds *)malloc(sizeof(t_lst_fds));
+	node = (t_lst_fds *)ft_malloc(sizeof(t_lst_fds), Tree);
 	if (!node)
 		return (NULL);
 	node->fds[IN_FD] = fds[IN_FD];
@@ -31,4 +31,19 @@ void	ft_lstadd_front_fd(t_lst_fds **lst, t_lst_fds *new)
 		return ;
 	new->next = *lst;
 	*lst = new;
+}
+
+void	close_pipes(t_lst_fds **head)
+{
+	t_lst_fds	*node;
+
+	if (!head || !*head)
+		return ;
+	node = *head;
+	while (node)
+	{
+		close(node->fds[IN_FD]);
+		close(node->fds[OUT_FD]);
+		node = node->next;
+	}
 }

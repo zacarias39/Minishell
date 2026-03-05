@@ -4,3 +4,4 @@ minishell
 *.a
 lab/
 backup/
+cformat _location.txt

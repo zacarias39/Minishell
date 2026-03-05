@@ -65,10 +65,8 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name)
 char	**matrix_from_list(t_wordlist **list, char *cmd_name)
 {
 	size_t	len;
-	ssize_t	i;
 	char	**matrix;
 
-	i = 0;
 	len = 1;
 	if ((*list) && (*list)->list_len)
 		len += (*list)->list_len;

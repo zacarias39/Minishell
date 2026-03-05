@@ -48,5 +48,6 @@ void		close_heredoc(t_ast *redir_node);
 
 t_lst_fds	*ft_lstnew_fd(int fds[2]);
 void		ft_lstadd_front_fd(t_lst_fds **lst, t_lst_fds *new);
+void	close_pipes(t_lst_fds **head);
 
 #endif

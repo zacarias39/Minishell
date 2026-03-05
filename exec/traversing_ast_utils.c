@@ -115,8 +115,8 @@ t_builtin	get_builtin_info(t_ast *node)
 	t_builtin	builtin;
 
 	builtin.redir = ft_redirlist;
-	builtin.fd_in = node->fd_in;
-	builtin.fd_out = node->fd_out;
+	builtin.fd_in = &node->fd_in;
+	builtin.fd_out = &node->fd_out;
 	builtin.args = (node->args_token) + JMP_CMD_NAME;
 	if (!ft_strcmp(node->token, "echo"))
 		builtin.cmd_exec = echo_cmd;

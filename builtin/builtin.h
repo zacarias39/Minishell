@@ -22,8 +22,8 @@
 typedef struct s_builtin
 {
 	int		error;
-	int		fd_in;
-	int		fd_out;
+	int		*fd_in;
+	int		*fd_out;
 	void	(*cmd_exec)(char **args, int fd);
 	bool	(*redir)(t_ast *, int *, int *);
 	char	**args;
