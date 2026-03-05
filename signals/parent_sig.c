@@ -37,7 +37,8 @@ void	handle_parent_sigint2(int sig)
 
 void	handle_busy(int sig)
 {
-	(void)sig;
+	if (sig == SIGTSTP)
+		printf("Stopped execution: cannot continue after the signal!\n");
 }
 
 void	handle_parent_sigint(int sig)
@@ -71,13 +72,13 @@ void	parent_signal(int op)
 	{
 		signal(SIGINT, handle_busy);
 		signal(SIGQUIT, handle_busy);
-		/*signal(SIGINT, handle_parent_sigint2);
-		signal(SIGQUIT, handle_parent_sigint2);
-		signal(SIGTERM, handle_parent_sigint2);
-		signal(SIGABRT, handle_parent_sigint2);
-		signal(SIGSEGV, handle_parent_sigint2);
-		signal(SIGFPE, handle_parent_sigint2);
-		signal(SIGILL, handle_parent_sigint2);
-		signal(SIGTSTP, handle_parent_sigint2);*/
+		signal(SIGINT, handle_busy);
+		signal(SIGQUIT, handle_busy);
+		signal(SIGTERM, handle_busy);
+		signal(SIGABRT, handle_busy);
+		signal(SIGSEGV, handle_busy);
+		signal(SIGFPE, handle_busy);
+		signal(SIGILL, handle_busy);
+		signal(SIGTSTP, handle_busy);
 	}
 }
