@@ -12,13 +12,15 @@
 
 #include "traversing_ast.h"
 
-int	process_exit_status(int status, int *sig)
+int	process_exit_status(int status, int *sig, int *sucess)
 {
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
 		status = WTERMSIG(status) + 128;
+		if (*sucess == true && status == SIGQUIT_CODE)
+			return (status);
 		if (!*sig || (*sig && *sig != status))
 		{
 			*sig = status;
@@ -33,21 +35,23 @@ int	process_exit_status(int status, int *sig)
 void	wait_child(void)
 {
 	int		sig;
+	int		sucess;
 	int		status;
-	ssize_t	last_proc;
-	ssize_t	n_forks;
-	pid_t	child_id;
-
+	t_info		info;
+	
 	sig = 0;
-	fork_calls_info(GET_LAST_PROC, NULL, &last_proc);
-	fork_calls_info(GET_N_FORKS, NULL, &n_forks);
-	while (n_forks > 0)
+	sucess = false;
+	fork_calls_info(GET_LAST_PROC, NULL, &info.last_proc);
+	fork_calls_info(GET_N_FORKS, NULL, &info.n_forks);
+	while (info.n_forks > 0)
 	{
-		child_id = waitpid(-1, &status, WUNTRACED | WCONTINUED);
-		status = process_exit_status(status, &sig);
-		if (child_id == last_proc)
+		info.child_id = waitpid(-1, &status, WUNTRACED | WCONTINUED);
+		status = process_exit_status(status, &sig, &sucess);
+		if (status == EXIT_SUCCESS)
+			sucess = true;
+		if (info.child_id == info.last_proc)
 			last_cmd_status(status, true);
-		n_forks--;
+		info.n_forks--;
 	}
 }
 

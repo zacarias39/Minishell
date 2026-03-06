@@ -25,9 +25,16 @@
 # define SIGQUIT_CODE 131
 # define JMP_CMD_NAME 1
 
+typedef struct s_info
+{
+	ssize_t	last_proc;
+	ssize_t	n_forks;
+	pid_t	child_id;
+}	t_info;
+
 void		add_pipes_to_child(t_ast *head);
 bool		check_file(char *file_name, t_token_type type);
-int			process_exit_status(int status, int *sig);
+int			process_exit_status(int status, int *sig, int *sucess);
 void		wait_child(void);
 
 void		traversing_ast(t_ast *head, bool from_fork);

@@ -84,6 +84,27 @@ void	get_line(char *delimeter, int fd, int line, int quotes)
 	free(str);
 }
 
+int	heredoc_count(int *fd, char op)
+{
+	static int	heredoc_len = 1;
+
+	if (heredoc_len == 17)
+	{
+		ft_perror(MSH, NULL, "maximum here-document count exceeded");
+		ft_free();	
+		exit(1);
+	}
+	if (op == RESET)
+		return (heredoc_len = 0, true);
+	if (pipe(fd) == -1)
+		return (false);
+	heredoc_len++;
+	collect_fds(fd[PIPE_READ], UPDATE_DATA);
+	fcntl(fd[PIPE_READ], F_SETFD, FD_CLOEXEC);
+	fcntl(fd[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
+	return (true);
+}
+
 t_word	*get_heredoc(t_word *node, size_t token_len)
 {
 	static int	line;
@@ -91,12 +112,9 @@ t_word	*get_heredoc(t_word *node, size_t token_len)
 
 	if (++line && !node)
 		return (NULL);
-	// bash: maximum here-document count exceeded, and exit; maximum is 16;
 	signal(SIGINT, handle_heredoc);
-	if (pipe(fd) == -1)
+	if (heredoc_count(fd, NO) == false)
 		return (NULL);
-	fcntl(fd[PIPE_READ], F_SETFD, FD_CLOEXEC);
-	fcntl(fd[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
 	if (remove_quotes(node->token) < token_len)
 		get_line(node->token, fd[PIPE_WRITE], line, true);
 	else

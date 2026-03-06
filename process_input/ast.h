@@ -73,6 +73,7 @@ int			add_token(t_list **list, char *token, char *word);
 void		add_list(t_list **list, char *word);
 // process_input/heredoc.c
 t_word		*get_heredoc(t_word *node, size_t token_len);
+int			heredoc_count(int *fd, char op);
 int			get_expr(char *prompt);
 
 #endif

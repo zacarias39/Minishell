@@ -125,6 +125,7 @@ typedef struct s_ast
 	int				fd_in;
 	int				fd_out;
 	int				c_paren;
+	int				fork_redir;
 	int				paren;
 	char			*token;
 	char			**args_token;

@@ -51,6 +51,20 @@ void	*ft_malloc(size_t size, t_malloc op)
 	return (content);
 }
 
+void	collect_fds(int fd, char op)
+{
+	static int	fds[17];
+	static int	len;
+
+	if (op == CLOSE)
+	{
+		while (len)
+			close(fds[len--]);
+		return ;
+	}
+	fds[len++] = fd;
+}
+
 void	ft_free_envars(t_envars *env_vars)
 {
 	ssize_t	i;

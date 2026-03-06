@@ -93,7 +93,7 @@ void	get_var(t_list **list, char *token, int type)
 	{
 		if (type != Heredoc && quotes_del(token))
 			continue ;
-		if (*token == '$' || *token == '*')
+		if ((*token == '$' && ft_isalnum(*(token + 1))) || *token == '*')
 		{
 			if (quotes_del(NULL) != '\'')
 			{

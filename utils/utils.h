@@ -85,6 +85,7 @@ void		ft_update_shlvl(void);
 void		ft_update_pwd(void);
 
 void		ft_free(void);
+void	        collect_fds(int fd, char op);
 
 void		close_fds(t_ast *redir_node, t_ast *word_node);
 

@@ -61,6 +61,8 @@ bool	get_elements(t_ast *parent, t_ast *node)
 		child->word->list[TAIL]->next = node->word->list[HEAD];
 	else
 		child->word = node->word;
+	if (node->fork_redir == true)
+		child->fork_redir = true;
 	child->word->list[TAIL] = node->word->list[TAIL];
 	return (true);
 }

@@ -32,6 +32,8 @@ t_ast	*redirection_list(void)
 			right = redirection();
 			if (right == NULL)
 				return (parent);
+			if (right->type == RedirRight)
+				parent->fork_redir = true;
 			parent->word->list[TAIL]->next = right;
 			parent->word->list[TAIL] = right;
 		}

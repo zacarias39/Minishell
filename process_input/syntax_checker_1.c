@@ -18,9 +18,9 @@ t_ast	*parse_expression(void)
 	t_ast	*root;
 
 	root = condition();
+	heredoc_count(NULL, RESET);
 	if (on_error(NULL, CHECK) || !expect(NULL, true))
 	{
-		printf("NULL\n");
 		on_error(NULL, RESET);
 		return (NULL);
 	}
@@ -109,11 +109,11 @@ t_ast	*command(void)
 	}
 	return (parent);
 }
+
 /*
 <COMMAND-ELEMENT>  ::= <WORD-LIST> | <REDIRECTION-LIST> |
 		'(' <CONDITION> ')' ;
 */
-
 t_ast	*command_element(bool rigor, bool is_arg)
 {
 	t_ast	*parent;
