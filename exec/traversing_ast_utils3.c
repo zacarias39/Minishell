@@ -18,6 +18,8 @@ bool	check_and_create_pipe(t_ast *head, bool *from_fork)
 	{
 		if (pipe(head->fds) == INVALID)
 			return (ft_perror(MSH, "pipe", strerror(errno)), false);
+		fcntl(head->fds[PIPE_READ], F_SETFD, FD_CLOEXEC);
+		fcntl(head->fds[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
 		add_pipes_to_child(head);
 		ft_lstadd_front_fd(&head->fds_lst, ft_lstnew_fd(head->fds));
 		if (head->left)

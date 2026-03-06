@@ -30,7 +30,7 @@ bool	are_equal(char *env_name, char *target)
 
 static void	update_t(t_envars *envars, char *env_to_unset)
 {
-	ssize_t			i;
+	ssize_t	i;
 
 	i = -1;
 	if (!env_to_unset)
@@ -51,12 +51,12 @@ static void	update_t(t_envars *envars, char *env_to_unset)
 	}
 }
 
-void	unset_cmd(char **args, int fd)
+void	unset_cmd(char **args, t_ast *word)
 {
 	ssize_t	i;
 
 	i = 0;
-	(void)fd;
+	(void)word;
 	while (args && args[i])
 		update_t(get_envs(NULL), args[i++]);
 	last_cmd_status(EXIT_SUCCESS, true);

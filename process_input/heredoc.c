@@ -95,6 +95,8 @@ t_word	*get_heredoc(t_word *node, size_t token_len)
 	signal(SIGINT, handle_heredoc);
 	if (pipe(fd) == -1)
 		return (NULL);
+	fcntl(fd[PIPE_READ], F_SETFD, FD_CLOEXEC);
+	fcntl(fd[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
 	if (remove_quotes(node->token) < token_len)
 		get_line(node->token, fd[PIPE_WRITE], line, true);
 	else

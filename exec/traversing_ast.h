@@ -35,16 +35,14 @@ void		traversing_command(t_ast *node, bool from_fork);
 void		ft_execute_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork);
 void		update_cmd_fds(t_ast *word_node);
 
-bool		builtin_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork);
+bool		builtin_cmd(t_ast *word, t_ast *redir_node, bool from_fork);
 
-bool		ft_redirlist(t_ast *head, int *input, int *output);
+bool		ft_redirlist(t_ast *head, int *input, int *output, bool from_fork);
 void		close_ast_node_fds(t_ast *head);
-t_builtin	get_builtin_info(t_ast *node, t_ast *redir);
+t_builtin	get_builtin_info(t_ast *node);
 
 bool		check_and_create_pipe(t_ast *head, bool *from_fork);
 bool		or_and_condition(t_ast *head);
-
-void		close_fds(t_ast *redir_node, t_ast *word_node);
 
 t_lst_fds	*ft_lstnew_fd(int fds[2]);
 void		ft_lstadd_front_fd(t_lst_fds **lst, t_lst_fds *new);

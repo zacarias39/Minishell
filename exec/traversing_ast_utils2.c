@@ -26,9 +26,7 @@ int	process_exit_status(int status, int *sig)
 		}
 	}
 	else if (WIFSTOPPED(status))
-	{
 		status = WSTOPSIG(status);
-	}
 	return (status);
 }
 
@@ -97,8 +95,8 @@ void	close_ast_node_fds(t_ast *head)
 		close(head->fds[PIPE_READ]);
 	if (head->fds[PIPE_WRITE] != INVALID)
 		close(head->fds[PIPE_WRITE]);
-	if (head->fd_in != INVALID)
+	if (head->fd_in != INVALID && head->fd_in != STDIN_FILENO)
 		close(head->fd_in);
-	if (head->fd_out != INVALID)
+	if (head->fd_out != INVALID && head->fd_out != STDOUT_FILENO)
 		close(head->fd_out);
 }

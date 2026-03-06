@@ -74,12 +74,11 @@ bool	ft_atol(const char *nptr, long long *ans)
 	return (true);
 }
 
-void	exit_cmd(char **args, int fd)
+void	exit_cmd(char **args, t_ast *word)
 {
 	long long	exit_value;
 
-	(void)fd;
-	ft_putstr_fd("exit\n", STDERR_FILENO);
+	ft_putendl_fd("exit", STDERR_FILENO);
 	if (args && *args)
 	{
 		if (!ft_atol(*args, &exit_value))
@@ -96,6 +95,7 @@ void	exit_cmd(char **args, int fd)
 	}
 	else
 		exit_value = last_cmd_status(NO_STATUS, GET_STATUS);
+	close_fds(NULL, word);
 	ft_free();
 	exit(last_cmd_status(exit_value, UPDATE_STATUS));
 }

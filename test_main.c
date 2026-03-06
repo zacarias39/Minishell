@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **envp)
 		parent_signal(IDLE);
 		line = get_user_input();
 		if (!line)
-			exit_cmd(NULL, STDOUT_FILENO);
+			exit_cmd(NULL, NULL);
 		root = NULL;
 		if (ft_strtok(line, NEXT, NO))
 			root = parse_expression();

@@ -65,10 +65,10 @@ char	**create_strs_copy_and_sort(void)
 //  we call the function even though it may already sorted;
 // Only sort if args is not NULL, new envars may be unsorted;
 
-void	export_cmd(char **args, int fd)
+void	export_cmd(char **args, t_ast *word)
 {
-	ssize_t		i;
-	char		**matrix;
+	ssize_t	i;
+	char	**matrix;
 
 	last_cmd_status(EXIT_SUCCESS, UPDATE_DATA);
 	if (args && *args)
@@ -80,7 +80,7 @@ void	export_cmd(char **args, int fd)
 	while (matrix[++i])
 	{
 		if (!(matrix[i][0] == '_' && matrix[i][1] == '='))
-			print_envs(matrix[i], fd);
+			print_envs(matrix[i], word->fd_out);
 	}
 	free(matrix);
 }

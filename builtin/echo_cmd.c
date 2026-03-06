@@ -12,7 +12,7 @@
 
 #include "builtin.h"
 
-bool	get_option(char *arg)
+static inline bool	get_option(char *arg)
 {
 	bool	has_nl;
 
@@ -29,7 +29,7 @@ bool	get_option(char *arg)
 	return (has_nl);
 }
 
-void	echo_cmd(char **args, int fd)
+void	echo_cmd(char **args, t_ast *word)
 {
 	bool	print_nl;
 	size_t	i;
@@ -46,11 +46,11 @@ void	echo_cmd(char **args, int fd)
 	}
 	while (args && args[i])
 	{
-		ft_putstr_fd(args[i++], fd);
+		ft_putstr_fd(args[i++], word->fd_out);
 		if (args[i])
-			ft_putstr_fd(" ", fd);
+			ft_putstr_fd(" ", word->fd_out);
 	}
 	if (print_nl)
-		write(fd, "\n", sizeof(char));
+		write(word->fd_out, "\n", sizeof(char));
 	last_cmd_status(EXIT_SUCCESS, true);
 }

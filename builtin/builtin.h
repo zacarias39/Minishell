@@ -22,20 +22,18 @@
 typedef struct s_builtin
 {
 	int		error;
-	int		*fd_in;
-	int		*fd_out;
-	void	(*cmd_exec)(char **args, int fd);
-	bool	(*redir)(t_ast *, int *, int *);
+	void	(*cmd_exec)(char **args, t_ast *word);
+	bool	(*redir)(t_ast *, int *, int *, bool);
 	char	**args;
 }			t_builtin;
 
-void		env_cmd(char **args, int fd);
-void		pwd_cmd(char **args, int fd);
-void		cd_cmd(char **path, int fd);
-void		unset_cmd(char **args, int fd);
-void		exit_cmd(char **args, int fd);
-void		echo_cmd(char **args, int fd);
-void		export_cmd(char **args, int fd);
+void		env_cmd(char **args, t_ast *word);
+void		pwd_cmd(char **args, t_ast *word);
+void		cd_cmd(char **path, t_ast *word);
+void		unset_cmd(char **args, t_ast *word);
+void		exit_cmd(char **args, t_ast *word);
+void		echo_cmd(char **args, t_ast *word);
+void		export_cmd(char **args, t_ast *word);
 void		trim(char *s, ssize_t len);
 void		fallback_dots(char **new_dir, char *dir);
 

@@ -12,7 +12,7 @@
 
 #include "builtin.h"
 
-void	env_cmd(char **args, int fd)
+void	env_cmd(char **args, t_ast *word)
 {
 	ssize_t		i;
 	t_envars	*envars;
@@ -25,7 +25,7 @@ void	env_cmd(char **args, int fd)
 	{
 		aux = envars->matrix[i];
 		if ((aux && *aux) && ft_strchr(aux, '='))
-			ft_putendl_fd(aux, fd);
+			ft_putendl_fd(aux, word->fd_out);
 		i++;
 	}
 }

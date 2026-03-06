@@ -20,22 +20,22 @@
  OBS: We must free the line returned by the readline
  */
 
-bool	builtin_cmd(t_ast *word_node, t_ast *redir_node, bool from_fork)
+bool	builtin_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 {
 	t_builtin	builtin;
 
-	if (!word_node)
+	if (!word)
 		return (false);
-	builtin = get_builtin_info(word_node, redir_node);
+	builtin = get_builtin_info(word);
 	if (builtin.error)
 		return (false);
-	if (*builtin.fd_out == INVALID)
-		*builtin.fd_out = STDOUT_FILENO;
-	if (builtin.redir(redir_node, builtin.fd_in, builtin.fd_out))
-		builtin.cmd_exec(builtin.args, *builtin.fd_out);
+	if (word->fd_out == INVALID)
+		word->fd_out = STDOUT_FILENO;
+	if (builtin.redir(redir_node, &word->fd_in, &word->fd_out, from_fork))
+		builtin.cmd_exec(builtin.args, word);
 	if (!from_fork)
 		return (true);
-	close_fds(redir_node, word_node);
+	close_fds(redir_node, word);
 	ft_free();
 	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }
@@ -51,7 +51,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 		return ;
 	if (!from_fork && !create_fork())
 		return ;
-	if (!ft_redirlist(redir_node, &word->fd_in, &word->fd_out))
+	if (!ft_redirlist(redir_node, &word->fd_in, &word->fd_out, from_fork))
 		exit((ft_free(), last_cmd_status(NO_STATUS, false)));
 	update_cmd_fds(word);
 	cmd_path = get_cmd_path(word->args_token[0]);
@@ -125,14 +125,14 @@ void	traversing_ast(t_ast *head, bool from_fork)
 	if (head->paren)
 		return (traversing_paren_expression(head));
 	if (head->type == Command)
-		return (traversing_command(head, from_fork), (void)NULL);
+		return (traversing_command(head, from_fork), (void) NULL);
 	if (head->type == RedirList)
 	{
-		ft_redirlist(head, NULL, NULL);
+		ft_redirlist(head, NULL, NULL, from_fork);	
 		return (close_fds(head, NULL));
 	}
 	if (head->type == Word)
-		return (ft_execute_cmd(head, NULL, from_fork), (void)NULL);
+		return (ft_execute_cmd(head, NULL, from_fork), (void) NULL);
 	if (!check_and_create_pipe(head, &from_fork))
 		return ;
 	traversing_ast(head->left, from_fork);

@@ -44,16 +44,19 @@ static inline bool	get_outfile(t_word *outfile, int *old_out_fd)
 
 	if (!(outfile->type == RedirRight || outfile->type == Append))
 		return (true);
+	if (*old_out_fd != INVALID)
+		close(*old_out_fd);
 	filename = get_expansion(outfile->token, RedirList);
 	if (!filename)
 		return (false);
 	if (!check_file(filename, outfile->type))
 		return (*old_out_fd = INVALID, false);
 	if (outfile->type == RedirRight)
-		*old_out_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0772);
+		*old_out_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY | __O_CLOEXEC,
+				0772);
 	else
-		*old_out_fd = open(filename, O_CREAT | O_WRONLY | O_APPEND);
-	outfile->fd = *old_out_fd;
+		*old_out_fd = open(filename,
+				O_CREAT | O_WRONLY | O_APPEND | __O_CLOEXEC);
 	if (*old_out_fd == INVALID)
 		return (ft_perror(MSH, "open", strerror(errno)), false);
 	return (true);
@@ -65,6 +68,8 @@ static inline bool	get_infile(t_word *infile, int *old_in_fd)
 
 	if (!(infile->type == RedirLeft || infile->type == Heredoc))
 		return (true);
+	if (*old_in_fd != INVALID)
+		close(*old_in_fd);
 	if (infile->type == Heredoc)
 		return (*old_in_fd = infile->fd, true);
 	filename = get_expansion(infile->token, RedirList);
@@ -72,20 +77,19 @@ static inline bool	get_infile(t_word *infile, int *old_in_fd)
 		return (false);
 	if (!check_file(filename, infile->type))
 		return (*old_in_fd = INVALID, false);
-	*old_in_fd = open(filename, O_RDONLY);
-	infile->fd = *old_in_fd;
+	*old_in_fd = open(filename, O_RDONLY | __O_CLOEXEC);
 	if (*old_in_fd == INVALID)
 		return (ft_perror(MSH, "open", strerror(errno)), false);
 	return (true);
 }
 
-bool	ft_redirlist(t_ast *head, int *input, int *output)
+bool	ft_redirlist(t_ast *head, int *input, int *output, bool from_fork)
 {
 	t_word	*node;
 	int		fd[2];
 
 	fd[IN_FD] = -1;
-	fd[OUT_FD] = -1;
+	fd[OUT_FD] = ((void) from_fork, -1);
 	if (!head)
 		return (true);
 	node = *head->word->list;
@@ -108,13 +112,11 @@ bool	ft_redirlist(t_ast *head, int *input, int *output)
 	return (true);
 }
 
-t_builtin	get_builtin_info(t_ast *node, t_ast *redir)
+t_builtin	get_builtin_info(t_ast *node)
 {
 	t_builtin	builtin;
 
 	builtin.redir = ft_redirlist;
-	builtin.fd_in = &node->fd_in;
-	builtin.fd_out = &node->fd_out;
 	builtin.args = (node->args_token) + JMP_CMD_NAME;
 	if (!ft_strcmp(node->token, "echo"))
 		builtin.cmd_exec = echo_cmd;
@@ -127,10 +129,7 @@ t_builtin	get_builtin_info(t_ast *node, t_ast *redir)
 	else if (!ft_strcmp(node->token, "unset"))
 		builtin.cmd_exec = unset_cmd;
 	else if (!ft_strcmp(node->token, "exit"))
-	{
-		close_fds(redir, node);
 		builtin.cmd_exec = exit_cmd;
-	}
 	else if (!ft_strcmp(node->token, "env"))
 		builtin.cmd_exec = env_cmd;
 	else
