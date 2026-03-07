@@ -51,15 +51,15 @@ void	*ft_malloc(size_t size, t_malloc op)
 	return (content);
 }
 
-void	collect_fds(int fd, char op)
+void	collect_heredoc_fds(int fd, char op)
 {
-	static int	fds[17];
+	static int	fds[MAX_HEREDOCS];
 	static int	len;
 
 	if (op == CLOSE)
 	{
 		while (len)
-			close(fds[len--]);
+			close(fds[--len]);
 		return ;
 	}
 	fds[len++] = fd;

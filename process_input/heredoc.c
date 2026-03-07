@@ -99,7 +99,7 @@ int	heredoc_count(int *fd, char op)
 	if (pipe(fd) == -1)
 		return (false);
 	heredoc_len++;
-	collect_fds(fd[PIPE_READ], UPDATE_DATA);
+	collect_heredoc_fds(fd[PIPE_READ], UPDATE_DATA);
 	fcntl(fd[PIPE_READ], F_SETFD, FD_CLOEXEC);
 	fcntl(fd[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
 	return (true);

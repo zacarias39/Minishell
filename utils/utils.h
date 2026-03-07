@@ -16,6 +16,8 @@
 # include "libft.h"
 # include "signals.h"
 
+# define MAX_HEREDOCS 17
+
 # define MAX_SHLVL 998
 # define EXPORT_ERROR 1
 
@@ -85,7 +87,7 @@ void		ft_update_shlvl(void);
 void		ft_update_pwd(void);
 
 void		ft_free(void);
-void	        collect_fds(int fd, char op);
+void	        collect_heredoc_fds(int fd, char op);
 
 void		close_fds(t_ast *redir_node, t_ast *word_node);
 
