@@ -12,43 +12,48 @@
 
 #include "utils.h"
 
-bool	is_valid(char *name, ssize_t n_len, char *pattern, ssize_t p_len)
+bool	is_valid_aux(char **n, char **p, char **m, const char **s)
 {
-	ssize_t	n_index;
-	ssize_t	p_index;
-	ssize_t	n_match;
-	ssize_t	star_index;
+	if (**n == **p)
+	{
+		*n = *n + 1;
+		*p = *p + 1;
+	}
+	else if (**p == '*')
+	{
+		*s = *p;
+		*m = *n;
+		*p = *p + 1;
+	}
+	else
+		return (false);
+	return (true);
+}
 
-	n_index = 0;
-	p_index = 0;
-	star_index = INVALID;
+bool	is_valid(char *name, char *pattern)
+{
+	char		*n_match;
+	const char	*star_pos = NULL;
+
 	if (*name == '.')
 		return (false);
-	while (n_index < n_len)
+	while (*name)
 	{
-		if (name[n_index] == pattern[p_index])
-		{
-			n_index++;
-			p_index++;
-		}
-		else if (pattern[p_index] == '*')
-		{
-			star_index = p_index++;
-			n_match = n_index;
-		}
-		else if (star_index == INVALID)
+		if (is_valid_aux(&name, &pattern, &n_match, &star_pos))
+			continue ;
+		else if (!star_pos)
 			return (false);
 		else
 		{
-			p_index = star_index + 1;
-			n_index = ++n_match;
+			pattern = (char *)star_pos + 1;
+			name = ++n_match;
 		}
 	}
-	while (p_index < p_len)
+	while (*pattern)
 	{
-		if (pattern[p_index] != '*')
+		if (*pattern != '*')
 			return (false);
-		p_index++;
+		pattern++;
 	}
 	return (true);
 }
@@ -56,7 +61,6 @@ bool	is_valid(char *name, ssize_t n_len, char *pattern, ssize_t p_len)
 ssize_t	count_dir_files(DIR *dir, char *pattern)
 {
 	struct dirent	*file_dir;
-	const ssize_t	pattern_len = ft_strlen(pattern);
 	ssize_t			i;
 
 	i = 0;
@@ -65,7 +69,7 @@ ssize_t	count_dir_files(DIR *dir, char *pattern)
 		file_dir = readdir(dir);
 		if (!file_dir)
 			break ;
-		if (!is_valid(file_dir->d_name, ft_strlen(file_dir->d_name), pattern, pattern_len))
+		if (!is_valid(file_dir->d_name, pattern))
 			continue ;
 		i++;
 	}
@@ -75,7 +79,6 @@ ssize_t	count_dir_files(DIR *dir, char *pattern)
 void	copy_names_to_arr(DIR *dir, char **matrix, char *pattern)
 {
 	struct dirent	*file_dir;
-	const ssize_t	pattern_len = ft_strlen(pattern);
 	ssize_t			i;
 
 	i = 0;
@@ -84,7 +87,7 @@ void	copy_names_to_arr(DIR *dir, char **matrix, char *pattern)
 		file_dir = readdir(dir);
 		if (!file_dir)
 			break ;
-		if (!is_valid(file_dir->d_name, ft_strlen(file_dir->d_name), pattern, pattern_len))
+		if (!is_valid(file_dir->d_name, pattern))
 			continue ;
 		matrix[i++] = ft_strdup(file_dir->d_name);
 	}
