@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 13:22:00 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/04 16:42:51 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/08 22:55:33 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void		list_add(t_wordlist **wordlist, char *token);
 // process_input/expansion.c
 char		*get_expansion(char *token, int type);
 // process_input/expansion_1.c
+int			find_wildcard(char **last);
 int			quotes_del(char *token);
 int			split_join(t_list **list, char *token);
 int			add_token(t_list **list, char *token, char *word);

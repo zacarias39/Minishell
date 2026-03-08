@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:30:42 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/08 22:21:06 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:47:47 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 	char		*token;
 	char		*expanded;
 
+	(void)word;
 	token = *s + 1;
 	while (ft_isalnum(*token))
 		str[len++] = *token++;
-	*word = token;
+	//*word = token;
 	*s = token - 1;
 	str[len] = 0;
 	len = 0;
@@ -37,24 +38,27 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 
 int	check_wildcard(t_list **list, char **token, int type)
 {
-	static char	*last_search;
+	char	*last_search;
 	t_list		*last;
-	int			found;
+	t_list		*node;
 
-	found = false;
-	if (quotes_del(NULL) || type == Heredoc || *token < last_search)
+	if (quotes_del(NULL) || type == Heredoc)
 		return (false);
 	last_search = *token;
-	
-	if (found == false)
+	if (!find_wildcard(&last_search))
 		return (*token = last_search, false);
-	*last_search = '\0';
+	node = get_dir_datas(*token);
+	if (node == NULL)
+		return (*token = last_search, false);
 	last = ft_lstlast(*list);
 	if (last)
-		last->next = get_dir_datas(get_current_dir(NULL, false));
+		last->next = node;
 	else
-		*list = get_dir_datas(get_current_dir(NULL, false));
-	return (*token[0] = '\0', *token = ++last_search, true);
+		*list = node;
+	*token[0] = '\0';
+	*last_search = '\0';
+	*token = ++last_search;
+	return (true);
 }
 
 void	check_env(t_list **list, char **s, char **word, int type)
@@ -78,7 +82,7 @@ void	check_env(t_list **list, char **s, char **word, int type)
 			add_var(list, word, &token, true);
 		else
 			add_var(list, word, &token, quotes_del(NULL));
-		*s = ++token;
+		*s = token++;
 		*word = token;
 	}
 }
@@ -95,7 +99,7 @@ void	get_var(t_list **list, char *token, int type)
 		check_wildcard(list, &token, type);
 		if (*token == '$' && quotes_del(NULL) != '\'')
 		{
-			if (ft_isalnum(*(token + 1)) && *(token + 1) == '?')
+			if (ft_isalnum(*(token + 1)) || *(token + 1) == '?')
 				check_env(list, &token, &word, type);
 		}
 		token++;
