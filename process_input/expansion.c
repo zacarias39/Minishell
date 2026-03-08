@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:30:42 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/08 23:47:47 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:13:53 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 	token = *s + 1;
 	while (ft_isalnum(*token))
 		str[len++] = *token++;
-	//*word = token;
 	*s = token - 1;
 	str[len] = 0;
 	len = 0;
@@ -98,10 +97,7 @@ void	get_var(t_list **list, char *token, int type)
 			continue ;
 		check_wildcard(list, &token, type);
 		if (*token == '$' && quotes_del(NULL) != '\'')
-		{
-			if (ft_isalnum(*(token + 1)) || *(token + 1) == '?')
-				check_env(list, &token, &word, type);
-		}
+			check_env(list, &token, &word, type);
 		token++;
 	}
 	add_list(list, word);
