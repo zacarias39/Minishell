@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:30:42 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/04 16:43:34 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/08 22:21:06 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,26 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 	return (0);
 }
 
-int	check_wildcard(t_list **list, char *start, char *token, int type)
+int	check_wildcard(t_list **list, char **token, int type)
 {
-	t_list	*last;
+	static char	*last_search;
+	t_list		*last;
+	int			found;
 
-	if ((token > start && *(token - 1)) || quotes_del(NULL) || type == Heredoc)
+	found = false;
+	if (quotes_del(NULL) || type == Heredoc || *token < last_search)
 		return (false);
-	while (*token == '*')
-		token++;
-	if (*token)
-		return (false);
+	last_search = *token;
+	
+	if (found == false)
+		return (*token = last_search, false);
+	*last_search = '\0';
 	last = ft_lstlast(*list);
 	if (last)
 		last->next = get_dir_datas(get_current_dir(NULL, false));
 	else
 		*list = get_dir_datas(get_current_dir(NULL, false));
-	return (true);
+	return (*token[0] = '\0', *token = ++last_search, true);
 }
 
 void	check_env(t_list **list, char **s, char **word, int type)
@@ -68,40 +72,31 @@ void	check_env(t_list **list, char **s, char **word, int type)
 	{
 		*token = 0;
 		add_list(list, *word);
-		if (next == '?')
-		{
-			token++;
-			*word = ++token;
+		if (next == '?' && token++)
 			add_list(list, get_status());
-		}
 		else if (type == Heredoc)
 			add_var(list, word, &token, true);
 		else
 			add_var(list, word, &token, quotes_del(NULL));
-		*s = token;
+		*s = ++token;
+		*word = token;
 	}
 }
 
 void	get_var(t_list **list, char *token, int type)
 {
 	char	*word;
-	char	*start;
 
-	start = token;
 	word = token;
 	while (token && *token)
 	{
 		if (type != Heredoc && quotes_del(token))
 			continue ;
-		if ((*token == '$' && ft_isalnum(*(token + 1))) || *token == '*')
+		check_wildcard(list, &token, type);
+		if (*token == '$' && quotes_del(NULL) != '\'')
 		{
-			if (quotes_del(NULL) != '\'')
-			{
-				if (!*list && check_wildcard(list, start, token, type))
-					return ;
-				if (*token == '$')
-					check_env(list, &token, &word, type);
-			}
+			if (ft_isalnum(*(token + 1)) && *(token + 1) == '?')
+				check_env(list, &token, &word, type);
 		}
 		token++;
 	}

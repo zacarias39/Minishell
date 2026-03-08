@@ -6,11 +6,34 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 17:17:50 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/04 16:43:36 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/08 22:27:29 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+
+int	find_wildcard(char **last)
+{
+	char	*last_search;
+	char	quotes;
+
+	quotes = 0;
+	last_search = *last;
+	while (*last_search)
+	{
+		if (!quotes && ft_strchr(QUOTES, *last_search))
+			quotes = *last_search;
+		else if (quotes == *last_search)
+			quotes = 0;
+		if (!quotes && ft_isspace(*last_search))
+			return (*last = last_search, false);
+		if (*(last_search + 1) == '$')
+			return (*token = last_search, false);
+		if (*last_search++ == '*' && !found)
+			found = true;
+		last_search++;
+	}
+}
 
 int	quotes_del(char *token)
 {
