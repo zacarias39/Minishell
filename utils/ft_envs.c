@@ -65,7 +65,7 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name, size_t len)
 	word = get_expansion(cmd_name, Word);
 	while (word)
 	{
-		if (word && len <= i)
+		if (word && len == i + 1)
 			matrix = ft_realloc_matrix(&matrix, &len);
 		if (word)
 			matrix[i++] = word;
