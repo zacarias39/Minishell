@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:30:42 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/09 00:13:53 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/09 21:26:18 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	check_env(t_list **list, char **s, char **word, int type)
 	quotes = quotes_del(NULL);
 	if (type != Heredoc && !quotes && ft_strchr(QUOTES, next))
 		quotes = true;
-	if (ft_isalnum(next) || quotes == true || next == '?')
+	if (next && (ft_isalnum(next) || quotes == true || next == '?'))
 	{
 		*token = 0;
 		add_list(list, *word);
