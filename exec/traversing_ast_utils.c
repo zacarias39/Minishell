@@ -83,7 +83,7 @@ static inline bool	get_infile(t_word *infile, int *old_in_fd)
 	return (true);
 }
 
-bool	ft_redirlist(t_ast *head, int *input, int *output, bool from_fork)
+bool	ft_redirlist(t_ast *redir, int *input, int *output, bool from_fork)
 {
 	t_word	*node;
 	int		fd[2];
@@ -91,15 +91,15 @@ bool	ft_redirlist(t_ast *head, int *input, int *output, bool from_fork)
 	(void)from_fork;
 	fd[IN_FD] = -1;
 	fd[OUT_FD] = -1;
-	if (!head)
+	if (!redir)
 		return (true);
-	node = *head->word->list;
+	node = *redir->word->list;
 	while (node)
 	{
 		if (!get_infile(node, &fd[IN_FD]))
-			return (close_fds(head, NULL), false);
+			return (close_fds(redir, NULL), false);
 		else if (!get_outfile(node, &fd[OUT_FD]))
-			return (close_fds(head, NULL), false);
+			return (close_fds(redir, NULL), false);
 		node = node->next;
 	}
 	if (fd[IN_FD] != INVALID && input)

@@ -44,7 +44,7 @@ void		update_cmd_fds(t_ast *word_node);
 
 bool		builtin_cmd(t_ast *word, t_ast *redir_node, bool from_fork);
 
-bool		ft_redirlist(t_ast *head, int *input, int *output, bool from_fork);
+bool		ft_redirlist(t_ast *redir, int *input, int *output, bool from_fork);
 void		close_ast_node_fds(t_ast *head);
 t_builtin	get_builtin_info(t_ast *node);
 

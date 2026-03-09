@@ -80,4 +80,3 @@ size_t	strlen_chr(char *str, char limit)
 		len++;
 	return (len);
 }
-
