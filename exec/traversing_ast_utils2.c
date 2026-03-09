@@ -37,8 +37,8 @@ void	wait_child(void)
 	int		sig;
 	int		sucess;
 	int		status;
-	t_info		info;
-	
+	t_info	info;
+
 	sig = 0;
 	sucess = false;
 	fork_calls_info(GET_LAST_PROC, NULL, &info.last_proc);

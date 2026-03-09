@@ -64,9 +64,27 @@ void	close_fds(t_ast *redir_node, t_ast *word_node)
 			close(node->fd);
 		node = node->next;
 	}
-//	set_default_std_fd(CLOSE);
 	if (!word_node)
 		return ;
 	close_pipes(&word_node->fds_lst);
 	close_ast_node_fds(word_node);
+}
+
+void	exec_redilirst(t_ast *redir, bool from_fork)
+{
+	if (!redir)
+		return ;
+	printf("%d\n", redir->fork_redir);
+	if (!from_fork && redir->fork_redir)
+	{
+		if (!create_fork())
+			return ;
+	}
+	ft_redirlist(redir, NULL, NULL, from_fork);
+	if (!(!from_fork && redir->fork_redir))
+		return ;
+	collect_heredoc_fds(NO, CLOSE);
+	close_fds(redir, NULL);
+	ft_free();
+	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }

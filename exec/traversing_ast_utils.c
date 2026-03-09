@@ -89,8 +89,7 @@ bool	ft_redirlist(t_ast *redir, int *input, int *output, bool from_fork)
 	int		fd[2];
 
 	(void)from_fork;
-	fd[IN_FD] = -1;
-	fd[OUT_FD] = -1;
+	ft_memcpy(fd, (int [2]){-1, -1}, sizeof(fd));
 	if (!redir)
 		return (true);
 	node = *redir->word->list;
@@ -110,7 +109,7 @@ bool	ft_redirlist(t_ast *redir, int *input, int *output, bool from_fork)
 		*output = fd[OUT_FD];
 	else if (fd[OUT_FD] != INVALID)
 		close(fd[OUT_FD]);
-	return (true);
+	return (last_cmd_status(EXIT_SUCCESS, UPDATE_DATA), true);
 }
 
 t_builtin	get_builtin_info(t_ast *node)

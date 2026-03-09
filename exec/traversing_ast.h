@@ -30,7 +30,7 @@ typedef struct s_info
 	ssize_t	last_proc;
 	ssize_t	n_forks;
 	pid_t	child_id;
-}	t_info;
+}			t_info;
 
 void		add_pipes_to_child(t_ast *head);
 bool		check_file(char *file_name, t_token_type type);
@@ -54,5 +54,7 @@ bool		or_and_condition(t_ast *head);
 t_lst_fds	*ft_lstnew_fd(int fds[2]);
 void		ft_lstadd_front_fd(t_lst_fds **lst, t_lst_fds *new);
 void		close_pipes(t_lst_fds **head);
+
+void		exec_redilirst(t_ast *redir, bool from_fork);
 
 #endif
