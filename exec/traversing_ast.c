@@ -46,7 +46,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 
 	if (from_fork && !create_fork())
 		return ;
-	word->args_token = matrix_from_list(&word->word, word->token);
+	word->args_token = get_cmd_args(&word->word, word->token);
 	if (builtin_cmd(word, redir_node, from_fork))
 		return ;
 	if (!from_fork && !create_fork())

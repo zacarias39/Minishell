@@ -115,23 +115,24 @@ bool	ft_redirlist(t_ast *redir, int *input, int *output, bool from_fork)
 
 t_builtin	get_builtin_info(t_ast *node)
 {
+	const char	*cmd_name = node->args_token[0];
 	t_builtin	builtin;
 
 	builtin.redir = ft_redirlist;
 	builtin.args = (node->args_token) + JMP_CMD_NAME;
-	if (!ft_strcmp(node->token, "echo"))
+	if (!ft_strcmp(cmd_name, "echo"))
 		builtin.cmd_exec = echo_cmd;
-	else if (!ft_strcmp(node->token, "cd"))
+	else if (!ft_strcmp(cmd_name, "cd"))
 		builtin.cmd_exec = cd_cmd;
-	else if (!ft_strcmp(node->token, "export"))
+	else if (!ft_strcmp(cmd_name, "export"))
 		builtin.cmd_exec = export_cmd;
-	else if (!ft_strcmp(node->token, "pwd"))
+	else if (!ft_strcmp(cmd_name, "pwd"))
 		builtin.cmd_exec = pwd_cmd;
-	else if (!ft_strcmp(node->token, "unset"))
+	else if (!ft_strcmp(cmd_name, "unset"))
 		builtin.cmd_exec = unset_cmd;
-	else if (!ft_strcmp(node->token, "exit"))
+	else if (!ft_strcmp(cmd_name, "exit"))
 		builtin.cmd_exec = exit_cmd;
-	else if (!ft_strcmp(node->token, "env"))
+	else if (!ft_strcmp(cmd_name, "env"))
 		builtin.cmd_exec = env_cmd;
 	else
 		return (builtin.error = true, builtin);

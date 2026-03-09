@@ -111,7 +111,7 @@ bool	ft_init_envars(char **envp, t_envars *new_envars)
 	while (envp && envp[len])
 		len++;
 	len += MATRIX_SIZE;
-	new_envars->matrix = ft_calloc(len, sizeof(char *));
+	new_envars->matrix = ft_calloc(len + 1, sizeof(char *));
 	if (!new_envars->matrix)
 		return (false);
 	new_envars->capacity = len;

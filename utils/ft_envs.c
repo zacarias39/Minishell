@@ -36,23 +36,23 @@ char	*ft_getenv(const char *name)
 
 char	**ft_realloc_matrix(char ***matrix, size_t *len)
 {
-	char	**new;	
+	char	**new;
 	char	**tmp;
 	size_t	i;
 
 	i = 0;
 	*len += 100;
 	tmp = *matrix;
-	new = ft_calloc(*len, sizeof(char *));
+	new = ft_malloc((*len + 1) * sizeof(char *), Tree);
 	if (!new)
 		return (NULL);
 	while (*tmp)
 		new[i++] = *tmp++;
-	free(*matrix);
 	return (new);
 }
 
-char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name, size_t len)
+char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name,
+		size_t len)
 {
 	size_t	i;
 	t_word	*node;
@@ -65,7 +65,7 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name, size_t len)
 	word = get_expansion(cmd_name, Word);
 	while (word)
 	{
-		if (word && len == i + 1)
+		if (word && i >= len)
 			matrix = ft_realloc_matrix(&matrix, &len);
 		if (word)
 			matrix[i++] = word;
@@ -81,15 +81,15 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name, size_t len)
 	return (matrix);
 }
 
-char	**matrix_from_list(t_wordlist **list, char *cmd_name)
+char	**get_cmd_args(t_wordlist **list, char *cmd_name)
 {
 	size_t	len;
 	char	**matrix;
 
-	len = 1;
+	len = 0;
 	if ((*list) && (*list)->list_len)
-		len += (*list)->list_len;
-	matrix = ft_calloc(len, sizeof(char *));
+		len = (*list)->list_len;
+	matrix = ft_malloc((len + 1) * sizeof(char *), Tree);
 	if (!matrix)
 		return (NULL);
 	matrix = add_to_args(list, matrix, cmd_name, len);

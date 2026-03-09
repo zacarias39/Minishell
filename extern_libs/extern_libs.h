@@ -61,7 +61,7 @@
 # define FILENAME 2
 # define WORD 3
 
-# define MATRIX_SIZE 1
+# define MATRIX_SIZE 100
 
 # define SINTAXE_ERROR 2
 

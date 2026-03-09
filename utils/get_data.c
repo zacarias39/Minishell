@@ -55,5 +55,6 @@ void	get_envars_organized(void)
 			envars->matrix[j++] = envars->matrix[i];
 		i++;
 	}
-	envars->matrix[j] = NULL;
+	if (j < envars->capacity)
+		envars->matrix[j] = NULL;
 }

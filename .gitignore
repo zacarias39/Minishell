@@ -1,4 +1,5 @@
 .vscode/
+minishell_tests/
 *.o
 minishell
 *.a

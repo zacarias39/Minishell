@@ -42,7 +42,7 @@ int	                set_default_std_fd(int fd, int backup);
 t_envars	*get_envs(t_envars *new);
 char		*get_current_dir(char *dir, bool update);
 
-char		**matrix_from_list(t_wordlist **list, char *cmd_name);
+char		**get_cmd_args(t_wordlist **list, char *cmd_name);
 //
 void		ft_perror(char *at, char *cmd, char *msg);
 char		*ft_getenv(const char *name);

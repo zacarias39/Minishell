@@ -119,7 +119,7 @@ char	*get_expansion(char *token, int type)
 	if (type == RedirList && ft_lstsize(list) != 1)
 	{
 		ft_perror("mnsh", token_tmp, "ambigous redirect");
-		return (last_cmd_status(1, UPDATE_DATA), NULL);
+		return (last_cmd_status(EXIT_FAILURE, UPDATE_DATA), NULL);
 	}
 	return (get_args(list, NEXT));
 }
