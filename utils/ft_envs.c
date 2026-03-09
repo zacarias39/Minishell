@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:02:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/04 16:41:38 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/09 23:10:54 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,20 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name,
 	if (*list)
 		node = (*list)->list[HEAD];
 	word = get_expansion(cmd_name, Word);
-	while (word)
+	while (true)
 	{
-		if (word && i >= len)
+		if ((word && *word) && i >= len)
 			matrix = ft_realloc_matrix(&matrix, &len);
-		if (word)
+		if (word && *word)
 			matrix[i++] = word;
-		else
-			break ;
 		word = get_args(NULL, NEXT);
 		if (!word && node)
 		{
 			word = get_expansion(node->token, Word);
 			node = node->next;
-		}
+		} 
+		else if (!word)
+			break ;
 	}
 	return (matrix);
 }
