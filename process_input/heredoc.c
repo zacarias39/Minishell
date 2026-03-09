@@ -100,8 +100,8 @@ int	heredoc_count(int *fd, char op)
 		return (false);
 	heredoc_len++;
 	collect_heredoc_fds(fd[PIPE_READ], UPDATE_DATA);
-	fcntl(fd[PIPE_READ], F_SETFD, FD_CLOEXEC);
-	fcntl(fd[PIPE_WRITE], F_SETFD, FD_CLOEXEC);
+	ioctl(fd[PIPE_READ], FIOCLEX);
+	ioctl(fd[PIPE_WRITE], FIOCLEX);
 	return (true);
 }
 
