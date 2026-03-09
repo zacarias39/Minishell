@@ -88,8 +88,9 @@ bool	ft_redirlist(t_ast *head, int *input, int *output, bool from_fork)
 	t_word	*node;
 	int		fd[2];
 
+	(void)from_fork;
 	fd[IN_FD] = -1;
-	fd[OUT_FD] = ((void) from_fork, -1);
+	fd[OUT_FD] = -1;
 	if (!head)
 		return (true);
 	node = *head->word->list;

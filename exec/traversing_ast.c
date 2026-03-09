@@ -51,7 +51,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 		return ;
 	if (!from_fork && !create_fork())
 		return ;
-	if (!ft_redirlist(redir_node, &word->fd_in, &word->fd_out, from_fork))
+	if (!ft_redirlist(redir_node, &word->fd_in, &word->fd_out, true))
 		exit((ft_free(), last_cmd_status(NO_STATUS, false)));
 	update_cmd_fds(word);
 	cmd_path = get_cmd_path(word->args_token[0]);
@@ -115,6 +115,8 @@ void	traversing_paren_expression(t_ast *head)
 		close(head->fds[PIPE_WRITE]);
 	traversing_ast(head, false);
 	wait_child();
+	close_pipes(&head->fds_lst);
+	collect_heredoc_fds(NO, CLOSE);
 	ft_free();
 	exit(last_cmd_status(NO_STATUS, GET_STATUS));
 }
@@ -129,7 +131,7 @@ void	traversing_ast(t_ast *head, bool from_fork)
 		return (traversing_command(head, from_fork), (void) NULL);
 	if (head->type == RedirList)
 	{
-		ft_redirlist(head, NULL, NULL, from_fork);	
+		ft_redirlist(head, NULL, NULL, from_fork);
 		return (close_fds(head, NULL));
 	}
 	if (head->type == Word)
