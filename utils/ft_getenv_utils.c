@@ -105,6 +105,9 @@ bool	ft_init_envars(char **envp, t_envars *new_envars)
 	ssize_t	len;
 
 	len = 0;
+	set_default_std_fd(dup(STDIN_FILENO), STDIN_FILENO);
+	set_default_std_fd(dup(STDOUT_FILENO), STDOUT_FILENO);
+	set_default_std_fd(dup(STDERR_FILENO), STDERR_FILENO);
 	while (envp && envp[len])
 		len++;
 	len += MATRIX_SIZE;

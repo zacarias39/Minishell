@@ -68,6 +68,8 @@ void	get_token(char *str, int *i)
 		operators = ft_split(OPERATORS, ' ');
 	if (!ft_strchr(OPERATOR, str[*i]))
 		return (*i = ft_strclose(str, *i), (void) NULL);
+	if (str[*i] == '&' && str[*i + 1] != '&')
+		return (*i += 1, (void) NULL);
 	while (operators && operators[++index])
 	{
 		len = ft_strlen(operators[index]);

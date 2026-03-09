@@ -74,8 +74,6 @@ char	*get_prompt(void)
 
 	*str = 0;
 	username = ft_getenv("USER");
-	// if the USER's length is lower or iqual to 1020,
-	//	we can give it the green color;
 	if (ft_strlen(username) <= 1020)
 	{
 		ft_strlcpy(str, "\001\033[32m\002", sizeof(str));
@@ -92,8 +90,8 @@ char	*get_user_input(void)
 	char	*username;
 	char	*line;
 
-	//	if (!isatty(STDIN_FILENO))
-	//		return (no_interactive_mode());
+	//if (!isatty(STDIN_FILENO))
+		//return (no_interactive_mode());
 	username = get_prompt();
 	line = readline(username);
 	g_sig_re = 0;

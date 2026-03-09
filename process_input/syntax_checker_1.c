@@ -21,6 +21,7 @@ t_ast	*parse_expression(void)
 	heredoc_count(NULL, RESET);
 	if (on_error(NULL, CHECK) || !expect(NULL, true))
 	{
+		collect_heredoc_fds(NO, CLOSE);
 		on_error(NULL, RESET);
 		return (NULL);
 	}

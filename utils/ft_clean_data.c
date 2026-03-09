@@ -63,6 +63,7 @@ void	collect_heredoc_fds(int fd, char op)
 			--len;
 			if (fds[len] >= 3)
 				close(fds[len]);
+			fds[len] = 0;
 		}
 		len = 0;
 		return ;
@@ -89,8 +90,9 @@ void	ft_free_envars(t_envars *env_vars)
 void	ft_free(void)
 {
 	ft_malloc(0, Free);
+	//collect_heredoc_fds(NO, CLOSE);
 	ft_free_envars(get_envs(NULL));
 	free(get_current_dir(NULL, false));
-	set_default_stdin(CLOSE);
+	set_default_std_fd(NO, CLOSE);
 	rl_clear_history();
 }

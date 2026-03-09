@@ -38,7 +38,7 @@
 # define GET_N_FORKS 3
 
 // ft_envs.c
-int			set_default_stdin(int fd);
+int	                set_default_std_fd(int fd, int backup);
 t_envars	*get_envs(t_envars *new);
 char		*get_current_dir(char *dir, bool update);
 

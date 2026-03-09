@@ -66,11 +66,15 @@ void	parent_signal(int op)
 {
 	if (op == IDLE)
 	{
+		if (g_sig_re == SIGINT)
+			set_default_std_fd(NO, STDIN_FILENO);
+		set_default_std_fd(NO, STDERR_FILENO);
 		signal(SIGINT, handle_parent_sigint);
 		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (op == BUSY)
 	{
+		set_default_std_fd(NO, STDOUT_FILENO);
 		signal(SIGINT, handle_busy);
 		signal(SIGQUIT, handle_busy);
 		signal(SIGINT, handle_busy);

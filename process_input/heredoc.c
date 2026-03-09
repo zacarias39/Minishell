@@ -51,8 +51,8 @@ int	get_expr(char *prompt)
 		}
 	}
 	if (g_sig_re == SIGINT)
-		return (set_default_stdin(STDIN_FILENO), false);
-	return (parent_signal(IDLE), false);
+		return (false);
+	return (signal(SIGINT, handle_parent_sigint), false);
 }
 
 void	get_line(char *delimeter, int fd, int line, int quotes)
@@ -122,11 +122,9 @@ t_word	*get_heredoc(t_word *node, size_t token_len)
 	node->fd = fd[PIPE_READ];
 	if (g_sig_re == SIGINT)
 	{
-		collect_heredoc_fds(NO, CLOSE);
-		set_default_stdin(STDIN_FILENO);
 		close(fd[PIPE_READ]);
 		node = NULL;
 	}
-	parent_signal(IDLE);
+	signal(SIGINT, handle_parent_sigint);
 	return (node);
 }

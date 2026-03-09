@@ -13,26 +13,31 @@
 #include "minishell.h"
 #include <stdio.h>
 
-int	set_default_stdin(int fd)
+int	set_default_std_fd(int fd, int backup)
 {
 	static int	stdin_backup;
+	static int	stdout_backup;
+	static int	stderr_backup;
 
-	if (fd != STDIN_FILENO && fd >= 0)
-	{
-		stdin_backup = fd;
-		return (0);
-	}
-	else if (fd == -3)
-		return (stdin_backup);
-	else if (fd == CLOSE)
+	if (backup == CLOSE)
 	{
 		close(stdin_backup);
-		return (0);
+		close(stdout_backup);
+		return (close(stderr_backup));
 	}
-	if (fd < 0)
-		return (0);
-	dup2(stdin_backup, STDIN_FILENO);
-	return (0);
+	else if (backup == STDIN_FILENO && fd > 2)
+		return (stdin_backup = fd, fd);
+	else if (backup == STDOUT_FILENO && fd > 2)
+		return (stdout_backup = fd, fd);
+	else if (backup == STDERR_FILENO && fd > 2)
+		return (stderr_backup = fd, fd);
+	else if (fd == INVALID)
+		return (INVALID);
+	if (backup == STDIN_FILENO)
+		return (dup2(stdin_backup, STDIN_FILENO));
+	else if (backup == STDOUT_FILENO)
+		return (dup2(stdout_backup, STDOUT_FILENO));
+	return (dup2(stderr_backup, STDOUT_FILENO));
 }
 
 int	main(int ac, char **av, char **envp)
@@ -44,7 +49,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	ft_init_envars(envp, &envars_info);
-	set_default_stdin(dup(STDIN_FILENO));
 	while (true)
 	{
 		parent_signal(IDLE);
@@ -52,9 +56,11 @@ int	main(int ac, char **av, char **envp)
 		if (!line)
 			exit_cmd(NULL, NULL);
 		root = NULL;
+		parent_signal(BUSY);
 		if (ft_strtok(line, NEXT, NO))
 			root = parse_expression();
-		parent_signal(BUSY);
+		if (root == NULL)
+			continue ;
 		traversing_ast(root, false);
 		wait_child();
 		ft_malloc(0, TreeFree);

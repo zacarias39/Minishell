@@ -64,7 +64,7 @@ void	close_fds(t_ast *redir_node, t_ast *word_node)
 			close(node->fd);
 		node = node->next;
 	}
-//	set_default_stdin(CLOSE);
+//	set_default_std_fd(CLOSE);
 	if (!word_node)
 		return ;
 	close_pipes(&word_node->fds_lst);

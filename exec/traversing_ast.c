@@ -62,6 +62,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 		ft_perror(MSH, "execve", strerror(errno));
 		last_cmd_status(126, UPDATE_DATA);
 	}
+	free(word->args_token);
 	collect_heredoc_fds(NO, CLOSE);
 	close_fds(redir_node, word);
 	ft_free();
