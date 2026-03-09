@@ -53,6 +53,8 @@ bool	ft_find_and_update(char *arg, t_envars *env_vars)
 		len = strlen_chr(env_vars->matrix[i], '=');
 		if (!ft_strncmp(env_vars->matrix[i], arg, len))
 		{
+			if (arg[len] != '=')
+				return (true);
 			free(env_vars->matrix[i]);
 			env_vars->matrix[i] = ft_strdup2(arg);
 			return (true);
