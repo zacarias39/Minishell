@@ -44,7 +44,7 @@ void	handle_busy(int sig)
 void	handle_parent_sigint(int sig)
 {
 	(void)sig;
-	last_cmd_status(SIGINT + 128, true);
+	last_cmd_status(SIGINT + 128, UPDATE_DATA);
 	if (g_sig_re != SIGINT)
 		ft_putchar_fd('\n', STDIN_FILENO);
 	rl_replace_line("", 0);
@@ -58,6 +58,7 @@ void	handle_heredoc(int sig)
 	g_sig_re = SIGINT;
 	on_error(NULL, RAISE);
 	ft_putchar_fd('\n', STDIN_FILENO);
+	last_cmd_status(SIGINT + 128, UPDATE_DATA);
 	close(STDIN_FILENO);
 }
 

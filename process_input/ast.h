@@ -15,6 +15,7 @@
 
 # include "signals.h"
 # include "utils.h"
+# include "builtin.h"
 
 # define RAISE 'P'
 # define RESET 'R'

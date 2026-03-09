@@ -32,7 +32,7 @@ int	get_expr(char *prompt)
 	char	*token;
 
 	token = NULL;
-	if (ft_strtok(NULL, PREVIOUS, NO))
+	if (!prompt || ft_strtok(NULL, PREVIOUS, NO))
 		return (false);
 	ft_strtok(NULL, NEXT, CLEAN);
 	signal(SIGINT, handle_heredoc);
@@ -41,9 +41,8 @@ int	get_expr(char *prompt)
 		token = readline(prompt);
 		if (!token && g_sig_re != SIGINT)
 		{
-			printf("mnsh: syntax error: unexpected end of file\n");
-			// display the error message;
-			exit(2);
+			ft_perror(MSH, NULL, "syntax error: unexpected end of file");
+			exit_cmd(NULL, NULL);
 		}
 		if (!ft_strtok(token, NEXT, NO))
 		{
@@ -86,9 +85,9 @@ void	get_line(char *delimeter, int fd, int line, int quotes)
 
 int	heredoc_count(int *fd, char op)
 {
-	static int	heredoc_len = 1;
+	static int	heredoc_len;
 
-	if (heredoc_len == 17)
+	if (heredoc_len == 16)
 	{
 		ft_perror(MSH, NULL, "maximum here-document count exceeded");
 		ft_free();	
@@ -123,6 +122,7 @@ t_word	*get_heredoc(t_word *node, size_t token_len)
 	node->fd = fd[PIPE_READ];
 	if (g_sig_re == SIGINT)
 	{
+		collect_heredoc_fds(NO, CLOSE);
 		set_default_stdin(STDIN_FILENO);
 		close(fd[PIPE_READ]);
 		node = NULL;

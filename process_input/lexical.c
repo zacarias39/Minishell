@@ -21,8 +21,6 @@ char	on_error(char *token, char rigor)
 		str = token;
 	else
 		str = "newline";
-	if (rigor == RAISE)
-		return (error = true, false);
 	if (rigor == CHECK)
 		return (error);
 	if (rigor == RESET)
@@ -33,6 +31,9 @@ char	on_error(char *token, char rigor)
 	}
 	if (rigor == false || error == true)
 		return (false);
+	last_cmd_status(2, UPDATE_DATA);
+	if (rigor == RAISE)
+		return (error = true, false);
 	printf("\e[33mmnsh:\e[0m syntax error near unexpected token `\e[31m%s\e[0m'\n",
 		str);
 	return (error = true, false);
@@ -62,18 +63,16 @@ void	get_token(char *str, int *i)
 	int			index;
 	int			len;
 
-	len = 2;
 	index = -1;
-	if (!operators)
+	if (operators == NULL)
 		operators = ft_split(OPERATORS, ' ');
 	if (!ft_strchr(OPERATOR, str[*i]))
-		return (*i = ft_strclose(str, *i), (void)NULL);
+		return (*i = ft_strclose(str, *i), (void) NULL);
 	while (operators && operators[++index])
 	{
-		if (ft_strnstr(&str[*i], operators[index], len))
-			return (*i += len, (void)NULL);
-		if (index == 3)
-			len = 1;
+		len = ft_strlen(operators[index]);
+		if (!ft_strncmp(&str[*i], operators[index], len))
+			return (*i += len, (void) NULL);
 	}
 }
 

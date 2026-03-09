@@ -59,7 +59,12 @@ void	collect_heredoc_fds(int fd, char op)
 	if (op == CLOSE)
 	{
 		while (len)
-			close(fds[--len]);
+		{
+			--len;
+			if (fds[len] >= 3)
+				close(fds[len]);
+		}
+		len = 0;
 		return ;
 	}
 	fds[len++] = fd;

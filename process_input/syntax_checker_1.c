@@ -62,7 +62,7 @@ t_ast	*pipeline(char *prompt)
 	t_ast	*parent;
 	t_ast	*right;
 
-	if ((prompt && get_expr(prompt)) || on_error(NULL, CHECK))
+	if (get_expr(prompt) || on_error(NULL, CHECK))
 		return (NULL);
 	parent = command();
 	while (parent && !on_error(NULL, CHECK))
