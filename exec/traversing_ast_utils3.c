@@ -18,8 +18,8 @@ bool	check_and_create_pipe(t_ast *head, bool *from_fork)
 	{
 		if (pipe(head->fds) == INVALID)
 			return (ft_perror(MSH, "pipe", strerror(errno)), false);
-		ioctl(head->fds[PIPE_READ], FIOCLEX);
-		ioctl(head->fds[PIPE_WRITE], FIOCLEX);
+		ioctl(head->fds[PIPE_READ], FIOCLEX | FIONBIO);
+		ioctl(head->fds[PIPE_WRITE], FIOCLEX | FIONBIO);
 		add_pipes_to_child(head);
 		ft_lstadd_front_fd(&head->fds_lst, ft_lstnew_fd(head->fds));
 		if (head->left)

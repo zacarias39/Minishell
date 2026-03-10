@@ -86,6 +86,7 @@ void	get_line(char *delimeter, int fd, int line, int quotes)
 int	heredoc_count(int *fd, char op)
 {
 	static int	heredoc_len;
+	const int	nonblock = 1;
 
 	if (heredoc_len == 16)
 	{
@@ -99,8 +100,8 @@ int	heredoc_count(int *fd, char op)
 		return (false);
 	heredoc_len++;
 	collect_heredoc_fds(fd[PIPE_READ], UPDATE_DATA);
-	ioctl(fd[PIPE_READ], FIOCLEX);
-	ioctl(fd[PIPE_WRITE], FIOCLEX);
+	ioctl(fd[PIPE_READ], FIOCLEX | FIONBIO, &nonblock);
+	ioctl(fd[PIPE_WRITE], FIOCLEX | FIONBIO, &nonblock);
 	return (true);
 }
 
