@@ -53,11 +53,10 @@ char	**ft_realloc_matrix(char ***matrix, size_t *len)
 
 char	**args_join(t_wordlist **end, char **matrix, char *token, size_t len)
 {
-	size_t	i;
-	char	*word;
+	size_t		i;
+	const char	*word = get_expansion(ft_strdup(token), Word);
 
 	i = 0;
-	word = get_expansion(ft_strdup(token), Word);
 	while (true)
 	{
 		if (token && ft_strchr(QUOTES, *token) && !word)
@@ -67,6 +66,7 @@ char	**args_join(t_wordlist **end, char **matrix, char *token, size_t len)
 		if (word)
 			matrix[i++] = word;
 		free(token);
+		token = NULL;
 		word = get_args(NULL, NEXT);
 		if (!word && *end && (*end)->list[HEAD])
 		{
