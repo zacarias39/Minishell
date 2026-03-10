@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:02:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/09 23:10:54 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/10 12:17:25 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,28 @@ char	**ft_realloc_matrix(char ***matrix, size_t *len)
 	return (new);
 }
 
-char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name,
-		size_t len)
+char	**args_join(t_wordlist **end, char **matrix, char *token, size_t len)
 {
 	size_t	i;
-	t_word	*node;
 	char	*word;
 
 	i = 0;
-	node = NULL;
-	if (*list)
-		node = (*list)->list[HEAD];
-	word = get_expansion(cmd_name, Word);
+	word = get_expansion(ft_strdup(token), Word);
 	while (true)
 	{
-		if ((word && *word) && i >= len)
+		if (token && ft_strchr(QUOTES, *token) && !word)
+			word = "";
+		if (word && i >= len)
 			matrix = ft_realloc_matrix(&matrix, &len);
-		if (word && *word)
+		if (word)
 			matrix[i++] = word;
+		free(token);
 		word = get_args(NULL, NEXT);
-		if (!word && node)
+		if (!word && *end && (*end)->list[HEAD])
 		{
-			word = get_expansion(node->token, Word);
-			node = node->next;
+			token = ft_strdup2((*end)->list[HEAD]->token);
+			word = get_expansion((*end)->list[HEAD]->token, Word);
+			(*end)->list[HEAD] = (*end)->list[HEAD]->next;
 		}
 		else if (!word)
 			break ;
@@ -92,7 +91,8 @@ char	**get_cmd_args(t_wordlist **list, char *cmd_name)
 	matrix = ft_malloc((len + 1) * sizeof(char *), Tree);
 	if (!matrix)
 		return (NULL);
-	matrix = add_to_args(list, matrix, cmd_name, len);
+	if (cmd_name)
+		matrix = args_join(list, matrix, ft_strdup2(cmd_name), len);
 	*list = NULL;
 	return (matrix);
 }

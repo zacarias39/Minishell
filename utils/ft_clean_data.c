@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_clean_data.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 13:47:23 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/04 16:41:36 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/10 12:25:58 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	ft_free_envars(t_envars *env_vars)
 	ssize_t	i;
 
 	i = 0;
-	while (i < env_vars->capacity)
+	while (i <= env_vars->capacity)
 	{
 		if (env_vars->matrix[i])
 			free(env_vars->matrix[i]);

@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:08:15 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/04 16:41:30 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/10 12:15:22 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ char	*get_cmd_path(char *cmd)
 
 	i = 0;
 	paths = cmd_paths(false);
-	if (!cmd || !*cmd)
+	if (!cmd)
 		return (false);
+	if (!*cmd)
+		return (ft_cmd_error(ft_strdup2(cmd), cmd, false));
 	if (!paths || ft_strchr(cmd, '/'))
 		return (ft_cmd_error(cmd, cmd, true));
 	aux = ft_strjoin("/", cmd);

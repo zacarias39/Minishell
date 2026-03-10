@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 15:25:03 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/04 16:41:42 by zcasimir        ###   ########.fr        */
+/*   Updated: 2026/03/10 12:40:06 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	get_envars_organized(void)
 	while (i < envars->capacity)
 	{
 		aux = envars->matrix[i];
-		if (aux && (*aux && ft_strchr(aux, '=')))
+		if (aux && ft_strchr(aux, '='))
 			envars->matrix[j++] = envars->matrix[i];
 		i++;
 	}
-	if (j < envars->capacity)
-		envars->matrix[j] = NULL;
+	free(envars->matrix[j]);
+	envars->matrix[j] = NULL;
 }
