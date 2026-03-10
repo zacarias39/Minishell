@@ -64,7 +64,7 @@ char	**args_join(t_wordlist **end, char **matrix, char *token, size_t len)
 		if (word && i >= len)
 			matrix = ft_realloc_matrix(&matrix, &len);
 		if (word)
-			matrix[i++] = word;
+			matrix[i++] = (char *)word;
 		free(token);
 		token = NULL;
 		word = get_args(NULL, NEXT);

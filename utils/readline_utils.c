@@ -87,8 +87,9 @@ char	*get_prompt(void)
 
 char	*get_user_input(void)
 {
-	char	*username;
-	char	*line;
+	const char	*default_prompt = DEFAULT_PROMPT;
+	char		*username;
+	char		*line;
 
 	if (!isatty(STDIN_FILENO))
 	{
@@ -100,7 +101,7 @@ char	*get_user_input(void)
 	username = get_prompt();
 	line = readline(username);
 	g_sig_re = 0;
-	if ((char *)DEFAULT_PROMPT != username)
+	if (default_prompt != username)
 		free(username);
 	if (line && *line)
 		add_history(line);
