@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_checker_1.c                                 :+:      :+:    :+:   */
+/*   syntax_checker_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/10 13:03:01 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/10 13:17:17 by zcasimir         ###   ########.fr       */
+/*   Created: 2026/03/10 12:52:10 by zcasimir          #+#    #+#             */
+/*   Updated: 2026/03/10 12:52:11 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_ast	*parse_expression(void)
 {
 	t_ast	*root;
 
-	root = pipeline(NULL);
+	root = condition();
 	heredoc_count(NULL, RESET);
 	if (on_error(NULL, CHECK) || !expect(NULL, true))
 	{
@@ -28,13 +28,43 @@ t_ast	*parse_expression(void)
 	return (root);
 }
 
+//<CONDITION>        ::= <PIPELINE> { ('||' | '&&') <PIPELINE> } ;
+t_ast	*condition(void)
+{
+	t_ast	*parent;
+	t_ast	*right;
+
+	parent = pipeline(NULL);
+	while (parent)
+	{
+		if (expect("||", false))
+		{
+			right = pipeline("cmdor> ");
+			if (right == NULL)
+				return (NULL);
+			parent = get_parent("||", parent, right, OrCondition);
+		}
+		else if (expect("&&", false))
+		{
+			right = pipeline("cmdand> ");
+			if (right == NULL)
+				return (NULL);
+			parent = get_parent("&&", parent, right, AndCondition);
+		}
+		else
+			return (parent);
+	}
+	return (NULL);
+}
+
 //<PIPELINE>         ::= <COMMAND> { '|' <COMMAND> } ;
 t_ast	*pipeline(char *prompt)
 {
 	t_ast	*parent;
 	t_ast	*right;
 
-	(void)prompt;
+	if (get_expr(prompt) || on_error(NULL, CHECK))
+		return (NULL);
 	parent = command();
 	while (parent && !on_error(NULL, CHECK))
 	{
@@ -68,6 +98,12 @@ t_ast	*command(void)
 			right = command_element(false, false);
 		if (right == NULL || on_error(NULL, CHECK))
 			return (parent);
+		if ((parent->c_paren && right->type == Word) || right->paren)
+		{
+			if (right->paren && parent->type != Word)
+				return (on_error("(", true), NULL);
+			return (on_error(right->token, true), NULL);
+		}
 		if (get_elements(parent, right))
 			continue ;
 		parent = get_parent(NULL, parent, right, Command);
@@ -91,7 +127,10 @@ t_ast	*command_element(bool rigor, bool is_arg)
 	parent = redirection_list();
 	if (parent)
 		return (parent);
-	if (rigor)
-		on_error(NULL, rigor);
+	if (on_error(NULL, CHECK) || !expect("(", rigor))
+		return (NULL);
+	parent = condition();
+	if (expect(")", true) && parent)
+		return (parent->c_paren = parent->paren = true, parent);
 	return (NULL);
 }

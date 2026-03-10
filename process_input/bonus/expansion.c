@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:30:42 by zcasimir          #+#    #+#             */
-/*   Updated: 2026/03/10 13:30:06 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/09 21:26:18 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,31 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 		return (split_join(list, ft_strdup(expanded)));
 	add_list(list, expanded);
 	return (0);
+}
+
+int	check_wildcard(t_list **list, char **token, int type)
+{
+	char	*last_search;
+	t_list	*last;
+	t_list	*node;
+
+	if (quotes_del(NULL) || type == Heredoc)
+		return (false);
+	last_search = *token;
+	if (!find_wildcard(&last_search))
+		return (*token = last_search, false);
+	node = get_dir_datas(*token);
+	if (node == NULL)
+		return (*token = last_search, false);
+	last = ft_lstlast(*list);
+	if (last)
+		last->next = node;
+	else
+		*list = node;
+	*token[0] = '\0';
+	*last_search = '\0';
+	*token = ++last_search;
+	return (true);
 }
 
 void	check_env(t_list **list, char **s, char **word, int type)
@@ -70,6 +95,7 @@ void	get_var(t_list **list, char *token, int type)
 	{
 		if (type != Heredoc && quotes_del(token))
 			continue ;
+		check_wildcard(list, &token, type);
 		if (*token == '$' && quotes_del(NULL) != '\'')
 			check_env(list, &token, &word, type);
 		token++;

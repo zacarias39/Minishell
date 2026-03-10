@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+         #
+#    By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 15:58:11 by dadmendo          #+#    #+#              #
-#    Updated: 2026/03/04 19:27:34 by dadmendo         ###   ########.fr        #
+#    Updated: 2026/03/10 13:51:48 by zcasimir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ HEADERS 	= minishell.h process_input/ast.h extern_libs/extern_libs.h exec/traver
 LIBFT		= ./libft/libft.a
 
 NAME		= minishell
+NAME_B		= minishell_bonus
 LIBS		= -l readline -L ./libft/ -l ft
 OBJS		= process_input/lexical.o process_input/process_ast.o \
 	process_input/syntax_checker_1.o process_input/syntax_checker_2.o \
@@ -31,22 +32,37 @@ OBJS		= process_input/lexical.o process_input/process_ast.o \
 	signals/parent_sig.o process_input/expansion_1.o\
 	utils/get_wildcard.o exec/lst_utils.o
 
-all	: $(NAME)
+OBJS_BONUS	= process_input/process_ast.o process_input/syntax_checker_2.o\
+	utils/lib_utils.o utils/readline_utils.o builtin/cd_cmd_utils.o builtin/cd_cmd.o\
+	builtin/echo_cmd.o builtin/env_cmd.o builtin/export_cmd.o builtin/unset_cmd.o\
+	builtin/pwd_cmd.o builtin/trim.o utils/ft_envs.o utils/ft_getenv_utils.o utils/ft_getenv_utils2.o\
+	utils/ft_clean_data.o test_main.o utils/cmd_utils.o utils/cmd_utils2.o builtin/exit_cmd.o utils/quick_sort.o \
+	exec/traversing_ast.o exec/traversing_ast_utils.o exec/traversing_ast_utils2.o exec/traversing_ast_utils3.o\
+	process_input/heredoc.o utils/get_data.o signals/parent_sig.o process_input/expansion_1.o\
+	utils/get_wildcard.o exec/lst_utils.o process_input/bonus/syntax_checker_1.o\
+	process_input/bonus/syntax_checker_utils.o process_input/bonus/lexical.o\
+	process_input/bonus/expansion.o
 
-$(NAME)	: $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
+all		: $(NAME)
+	
+bonus		: $(LIBFT) $(OBJS_BONUS)
+		$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(NAME_B) $(LIBS)
+	
+$(NAME)		: $(LIBFT) $(OBJS)
+		$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
 
-$(LIBFT):
-	make bonus -C ./libft/
+$(LIBFT)	:
+		make bonus -C ./libft/
 
-$(OBJS)	: $(HEADERS)
+$(OBJS)		: $(HEADERS)
+$(OBJS_BONUS)	: $(HEADERS)
 
 clean	:
-	rm -fr $(OBJS)
+	rm -fr $(OBJS) $(OBJS_BONUS)
 	make clean -C ./libft/
 
 fclean	: clean
-	rm -fr $(NAME)
+	rm -fr $(NAME) $(NAME_B)
 	make fclean -C ./libft/
 
 re	: fclean all

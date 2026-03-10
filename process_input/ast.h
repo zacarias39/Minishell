@@ -6,7 +6,7 @@
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 13:22:00 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/08 22:55:33 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/10 13:26:56 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@
 # define PREVIOUS true
 # define NEXT false
 # define QUOTES "\'\""
-# define OPERATORS "&& || << >> < > | ( )"
+
+# define OPERATOR "<>|"
+# define OPERATOR_BONUS "<>&|()"
+
+# define OPERATORS "<< >> < > |"
+# define OPERATORS_BONUS "&& || << >> < > | ( )"
 
 # define ERROR_MSG "\e[33mmnsh:\e[0m syntax error near unexpected token "
 

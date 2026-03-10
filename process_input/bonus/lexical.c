@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexical.c                                          :+:      :+:    :+:   */
+/*   lexical_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:05:48 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/10 13:27:35 by zcasimir         ###   ########.fr       */
+/*   Updated: 2026/03/10 13:03:56 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_strclose(char *str, int i)
 			quotes = str[i];
 		else if (quotes == str[i])
 			quotes = 0;
-		if ((ft_strchr(OPERATOR, str[i]) || ft_ifs(str[i])) && !quotes)
+		if ((ft_strchr(OPERATOR_BONUS, str[i]) || ft_ifs(str[i])) && !quotes)
 			break ;
 		i++;
 	}
@@ -64,9 +64,11 @@ void	get_token(char *str, int *i)
 
 	index = -1;
 	if (operators == NULL)
-		operators = ft_split(OPERATORS, ' ');
-	if (!ft_strchr(OPERATOR, str[*i]))
+		operators = ft_split(OPERATORS_BONUS, ' ');
+	if (!ft_strchr(OPERATOR_BONUS, str[*i]))
 		return (*i = ft_strclose(str, *i), (void) NULL);
+	if (str[*i] == '&' && str[*i + 1] != '&')
+		return (*i += 1, (void) NULL);
 	while (operators && operators[++index])
 	{
 		len = ft_strlen(operators[index]);
@@ -92,7 +94,7 @@ char	*get_next_token(char *str, int *i)
 	get_token(str, i);
 	removed = str[*i];
 	str[*i] = EOS;
-	if (!ft_strchr(OPERATOR, *start))
+	if (!ft_strchr(OPERATOR_BONUS, *start))
 		return (ft_strdup(start));
 	return (start);
 }

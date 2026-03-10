@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extern_libs.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dadmendo <dadmendo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zcasimir <zcasimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 15:10:01 by dadmendo          #+#    #+#             */
-/*   Updated: 2026/03/04 19:29:04 by dadmendo         ###   ########.fr       */
+/*   Updated: 2026/03/10 13:28:28 by zcasimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,10 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
-# define GREATER '>'
-# define LESS '<'
-# define SQUOTE '\''
-# define DQUOTE '\"'
-# define WILDCARD '*'
-# define AND '&'
-# define OR '|'
 # define EOS '\0'
-# define OPERATOR "<>&|()"
 
 # define HEAD 0
 # define TAIL 1
-# define EOS '\0'
-# define BCMD "cd echo pwd export env unset exit"
-# define METACHAR "<< < > >> | ="
 
 # define MSH "mnsh"
 # define DEFAULT_PROMPT "\001\033[32m\002mnsh$ \001\033[0m\002"
