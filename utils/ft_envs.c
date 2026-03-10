@@ -41,7 +41,7 @@ char	**ft_realloc_matrix(char ***matrix, size_t *len)
 	size_t	i;
 
 	i = 0;
-	*len += 100;
+	*len += MATRIX_SIZE;
 	tmp = *matrix;
 	new = ft_malloc((*len + 1) * sizeof(char *), Tree);
 	if (!new)
