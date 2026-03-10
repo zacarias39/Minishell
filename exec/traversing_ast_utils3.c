@@ -74,7 +74,6 @@ void	exec_redilirst(t_ast *redir, bool from_fork)
 {
 	if (!redir)
 		return ;
-	printf("%d\n", redir->fork_redir);
 	if (!from_fork && redir->fork_redir)
 	{
 		if (!create_fork())
