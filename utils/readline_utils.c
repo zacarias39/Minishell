@@ -100,7 +100,7 @@ char	*get_user_input(void)
 	username = get_prompt();
 	line = readline(username);
 	g_sig_re = 0;
-	if (ft_strcmp(DEFAULT_PROMPT, username))
+	if ((char *)DEFAULT_PROMPT != username)
 		free(username);
 	if (line && *line)
 		add_history(line);
