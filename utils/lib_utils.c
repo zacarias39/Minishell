@@ -80,3 +80,9 @@ size_t	strlen_chr(char *str, char limit)
 		len++;
 	return (len);
 }
+
+void	close_no_interactive_mode(void)
+{
+	ft_free();
+	exit(last_cmd_status(NO_STATUS, GET_STATUS));
+}

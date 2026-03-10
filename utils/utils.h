@@ -90,5 +90,6 @@ void		ft_free(void);
 void	        collect_heredoc_fds(int fd, char op);
 
 void		close_fds(t_ast *redir_node, t_ast *word_node);
+void    	close_no_interactive_mode(void);
 
 #endif

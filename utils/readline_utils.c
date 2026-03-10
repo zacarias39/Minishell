@@ -91,7 +91,12 @@ char	*get_user_input(void)
 	char	*line;
 
 	if (!isatty(STDIN_FILENO))
-		return (no_interactive_mode());
+	{
+		line = no_interactive_mode();
+		if (line == NULL)
+			return (close_no_interactive_mode(), NULL);
+		return (line);
+	}
 	username = get_prompt();
 	line = readline(username);
 	g_sig_re = 0;
