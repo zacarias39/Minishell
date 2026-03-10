@@ -34,8 +34,7 @@ char	on_error(char *token, char rigor)
 	last_cmd_status(2, UPDATE_DATA);
 	if (rigor == RAISE)
 		return (error = true, false);
-	printf("\e[33mmnsh:\e[0m syntax error near unexpected token `\e[31m%s\e[0m'\n",
-		str);
+	printf(ERROR_MSG "`\e[31m%s\e[0m'\n", str);
 	return (error = true, false);
 }
 

@@ -13,9 +13,9 @@
 #ifndef AST_H
 # define AST_H
 
+# include "builtin.h"
 # include "signals.h"
 # include "utils.h"
-# include "builtin.h"
 
 # define RAISE 'P'
 # define RESET 'R'
@@ -26,6 +26,8 @@
 # define NEXT false
 # define QUOTES "\'\""
 # define OPERATORS "&& || << >> < > | ( )"
+
+# define ERROR_MSG "\e[33mmnsh:\e[0m syntax error near unexpected token "
 
 extern int	g_sig_re;
 

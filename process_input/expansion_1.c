@@ -15,7 +15,7 @@
 int	find_wildcard(char **last)
 {
 	char	*last_search;
-	int 	found;
+	int		found;
 
 	found = false;
 	last_search = *last;

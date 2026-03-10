@@ -38,8 +38,8 @@ int	add_var(t_list **list, char **word, char **s, int quotes)
 int	check_wildcard(t_list **list, char **token, int type)
 {
 	char	*last_search;
-	t_list		*last;
-	t_list		*node;
+	t_list	*last;
+	t_list	*node;
 
 	if (quotes_del(NULL) || type == Heredoc)
 		return (false);

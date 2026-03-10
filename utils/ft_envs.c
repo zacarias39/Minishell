@@ -74,7 +74,7 @@ char	**add_to_args(t_wordlist **list, char **matrix, char *cmd_name,
 		{
 			word = get_expansion(node->token, Word);
 			node = node->next;
-		} 
+		}
 		else if (!word)
 			break ;
 	}

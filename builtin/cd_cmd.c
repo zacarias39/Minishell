@@ -101,7 +101,7 @@ void	cd_cmd(char **path, t_ast *word)
 
 	(void)word;
 	if (!get_cd_args(&dir, path))
-		return (last_cmd_status(EXIT_FAILURE, UPDATE_STATUS), (void)NULL);
+		return (last_cmd_status(EXIT_FAILURE, UPDATE_STATUS), (void) NULL);
 	new_dir = change_directory(dir);
 	status = last_cmd_status(NO_STATUS, GET_STATUS);
 	if (status != EXIT_SUCCESS && status != GETCWD_ERROR)

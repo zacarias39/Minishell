@@ -38,7 +38,7 @@
 # define GET_N_FORKS 3
 
 // ft_envs.c
-int	                set_default_std_fd(int fd, int backup);
+int			set_default_std_fd(int fd, int backup);
 t_envars	*get_envs(t_envars *new);
 char		*get_current_dir(char *dir, bool update);
 
@@ -87,9 +87,9 @@ void		ft_update_shlvl(void);
 void		ft_update_pwd(void);
 
 void		ft_free(void);
-void	        collect_heredoc_fds(int fd, char op);
+void		collect_heredoc_fds(int fd, char op);
 
 void		close_fds(t_ast *redir_node, t_ast *word_node);
-void    	close_no_interactive_mode(void);
+void		close_no_interactive_mode(void);
 
 #endif

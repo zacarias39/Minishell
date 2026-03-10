@@ -90,7 +90,7 @@ int	heredoc_count(int *fd, char op)
 	if (heredoc_len == 16)
 	{
 		ft_perror(MSH, NULL, "maximum here-document count exceeded");
-		ft_free();	
+		ft_free();
 		exit(1);
 	}
 	if (op == RESET)

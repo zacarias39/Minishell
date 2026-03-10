@@ -127,14 +127,14 @@ void	traversing_ast(t_ast *head, bool from_fork)
 	if (head->paren)
 		return (traversing_paren_expression(head));
 	if (head->type == Command)
-		return (traversing_command(head, from_fork), (void)NULL);
+		return (traversing_command(head, from_fork), (void) NULL);
 	if (head->type == RedirList)
 	{
 		exec_redilirst(head, from_fork);
 		return (close_fds(head, NULL));
 	}
 	if (head->type == Word)
-		return (ft_execute_cmd(head, NULL, from_fork), (void)NULL);
+		return (ft_execute_cmd(head, NULL, from_fork), (void) NULL);
 	if (!check_and_create_pipe(head, &from_fork))
 		return ;
 	traversing_ast(head->left, from_fork);
