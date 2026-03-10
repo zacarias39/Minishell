@@ -57,8 +57,7 @@ void	ft_execute_cmd(t_ast *word, t_ast *redir_node, bool from_fork)
 	cmd_path = get_cmd_path(word->args_token[0]);
 	if (cmd_path)
 	{
-		get_envars_organized();
-		execve(cmd_path, word->args_token, get_envs(NULL)->matrix);
+		execve(cmd_path, word->args_token, get_envars_organized());
 		ft_perror(MSH, "execve", strerror(errno));
 		last_cmd_status(126, UPDATE_DATA);
 	}

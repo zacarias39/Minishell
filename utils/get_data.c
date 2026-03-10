@@ -38,23 +38,29 @@ char	*get_status(void)
 	return (ft_itoa(last_cmd_status(NO_STATUS, GET_STATUS)));
 }
 
-void	get_envars_organized(void)
+char	**get_envars_organized(void)
 {
 	ssize_t		i;
 	ssize_t		j;
 	t_envars	*envars;
+	char		**matrix;
 	char		*aux;
 
 	i = 0;
 	j = 0;
 	envars = get_envs(NULL);
+	if (envars == NULL || envars->capacity <= 0)
+		return (NULL);
+	matrix = ft_malloc((envars->n_items + 1) * sizeof(char *), Tree);
+	if (!matrix)
+		return (envars->matrix);
 	while (i < envars->capacity)
 	{
 		aux = envars->matrix[i];
 		if (aux && ft_strchr(aux, '='))
-			envars->matrix[j++] = envars->matrix[i];
+			matrix[j++] = envars->matrix[i];
 		i++;
 	}
-	free(envars->matrix[j]);
-	envars->matrix[j] = NULL;
+	matrix[j] = NULL;
+	return (matrix);
 }

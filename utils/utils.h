@@ -74,7 +74,7 @@ size_t		strlen_chr(char *str, char limit);
 t_list		*get_dir_datas(char *path);
 
 char		*get_status(void);
-void		get_envars_organized(void);
+char	    **get_envars_organized(void);
 
 char		*ft_strdup2(const char *s);
 char		*ft_strjoin2(char const *s1, char const *s2);
